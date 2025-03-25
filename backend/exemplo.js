@@ -81,28 +81,6 @@ const mapa_registrador = {
         ]
     }
 };
-
-client.connectTCP(config.ip, { port: config.port })
-    .then(() => {
-        client.setID(config.id);
-        console.log("Conectado. Iniciando leitura...\n");
-
-        setInterval(() => {
-            client.readHoldingRegisters(mapa_registrador.inicio,
-                                        mapa_registrador.fim
-            ).then(data => {
-                for(let i = mapa_registrador.inicio; i < mapa_registrador.fim; i++ ){
-                    for(let i = 0; i < mapa_registrador[i]; i++){
-                        console.log(mapa_registrador);
-                    }
-                }
-
-            })
-            .catch(err => {
-                console.error("Erro na leitura!", err.message);
-            });
-    }, config.tempo); 
-    })
-    .catch(err => {
-        console.error("Falha na conexão:", err.message);
-    });
+for(let i = config.inicio; i < config.fim; i++ ){
+    console.log(mapa_registrador[i][i]);
+}

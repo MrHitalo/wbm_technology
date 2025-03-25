@@ -1,15 +1,17 @@
 const ModbusRTU = require("modbus-serial");
 const client = new ModbusRTU();
 
+// Configurações do cliente Modbus
 const config = {
     ip: "192.168.0.210",
     port: 502,
     id: 99,
-    tempo: 3000,
-    inicio: 0,
-    fim: 39,
-}
+    tempo: 3000,    // Intervalo de polling em ms
+    inicio: 0,      // Parâmetro opcional para filtro
+    fim: 39         // Parâmetro opcional para filtro
+};
 
+// Mapeamento dos dispositivos e registradores
 const mapa_registrador = {
     esfera: {
         end_register: 8,
@@ -26,7 +28,7 @@ const mapa_registrador = {
         ]
     },
     gaveta: {
-       end_register: 17,
+        end_register: 17,
         fields: [
             "Hora Ligada: ",
             "Hora Desligada: ",
@@ -60,7 +62,7 @@ const mapa_registrador = {
     },
     umidade: {
         end_register: 29,
-        fields:[
+        fields: [
             "Umidade: ",
             "Temperatura: ",
             "Erro: "
@@ -82,27 +84,70 @@ const mapa_registrador = {
     }
 };
 
-client.connectTCP(config.ip, { port: config.port })
-    .then(() => {
+// Função de conexão com o dispositivo Modbus
+async function conectarModbus() {
+    try {
+        await client.connectTCP(config.ip, { port: config.port });
         client.setID(config.id);
-        console.log("Conectado. Iniciando leitura...\n");
+        console.log("Conectado ao Modulo Mestre");
+    } catch (err) {
+        console.error("Erro na conexão:", err.message);
+    }
+}
 
-        setInterval(() => {
-            client.readHoldingRegisters(mapa_registrador.inicio,
-                                        mapa_registrador.fim
-            ).then(data => {
-                for(let i = mapa_registrador.inicio; i < mapa_registrador.fim; i++ ){
-                    for(let i = 0; i < mapa_registrador[i]; i++){
+// Função para ler dados de um dispositivo específico
+async function lerDispositivo(dispositivo) {
+    try {
+        const startAddress = dispositivo.end_register;
+        const quantity = dispositivo.fields.length;
+        
+        // Fazer a leitura dos registradores
+        const resposta = await client.readHoldingRegisters(startAddress, quantity);
+        
+        // Mapear os valores para os campos
+        const dados = {};
+        resposta.data.forEach((valor, index) => {
+            dados[dispositivo.fields[index]] = valor;
+        });
+        
+        return dados;
+    } catch (err) {
+        console.error(`Erro na leitura:`, err.message);
+        return null;
+    }
+}
 
-                    }
-                }
+// Função principal para ler todos os dispositivos
+async function lerTodosDispositivos() {
+    try {
+        // Verificar e reconectar se necessário
+        if (!client.isOpen) {
+            await conectarModbus();
+        }
 
-            })
-            .catch(err => {
-                console.error("Erro na leitura!", err.message);
-            });
-    }, config.tempo); 
-    })
-    .catch(err => {
-        console.error("Falha na conexão:", err.message);
-    });
+        // Iterar por todos os dispositivos do mapa
+        for (const [nomeDispositivo, dispositivo] of Object.entries(mapa_registrador)) {
+            const dados = await lerDispositivo(dispositivo);
+            
+            if (dados) {
+                console.log(`\n=== ${nomeDispositivo.toUpperCase()} ===`);
+                Object.entries(dados).forEach(([campo, valor]) => {
+                    console.log(`${campo} ${valor}`);
+                });
+            }
+        }
+    } catch (err) {
+        console.error("Erro geral:", err.message);
+    }
+}
+
+// Iniciar o ciclo de leitura
+console.log("Iniciando cliente Modbus...");
+setInterval(lerTodosDispositivos, config.tempo);
+
+// Lidar com encerramento
+process.on('SIGINT', () => {
+    console.log("\nDesconectando...");
+    client.close();
+    process.exit();
+});
