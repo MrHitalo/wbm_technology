@@ -8,8 +8,6 @@ const SLAVE_ID = 1;
 const START_REGISTER = 7;  // Endereço 40008
 const NUM_REGISTERS = 12;  // Lê 12 registradores
 
-console.log("teste");
-
 client.connectTCP(DEVICE_IP, { port: PORT })
     // conexão
     .then(() => {
