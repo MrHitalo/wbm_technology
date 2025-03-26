@@ -130,7 +130,7 @@ async function lerTodosDispositivos() {
             const dados = await lerDispositivo(dispositivo);
             
             if (dados) {
-                console.log(`\n=== ${nomeDispositivo.toUpperCase()} ===`);
+                console.log(`\n=== ${nomeDispositivo.toUpperCase()} ===`);  
                 Object.entries(dados).forEach(([campo, valor]) => {
                     console.log(`${campo} ${valor}`);
                 });
