@@ -6,15 +6,14 @@ const config = {
     ip: "192.168.0.210",
     port: 502,
     id: 99,
-    tempo: 3000,    // Intervalo de polling em ms
-    inicio: 0,      // Parâmetro opcional para filtro
-    fim: 39         // Parâmetro opcional para filtro
+    tempo: 3000,    
+    inicio: 0,      
+    fim: 39         
 };
 
-// Mapeamento dos dispositivos e registradores
 const mapa_registrador = {
     esfera: {
-        end_register: 8,
+        adress: 0,
         fields: [
             "Hora Ligada: ",
             "Hora Desligada: ",
@@ -28,7 +27,7 @@ const mapa_registrador = {
         ]
     },
     gaveta: {
-        end_register: 17,
+        adress: 9,
         fields: [
             "Hora Ligada: ",
             "Hora Desligada: ",
@@ -42,7 +41,7 @@ const mapa_registrador = {
         ]
     },
     ar: {
-        end_register: 21,
+        adress: 18,
         fields: [
             "Posicao: ",
             "Erro: ",
@@ -51,7 +50,7 @@ const mapa_registrador = {
         ]
     },
     temperatura: {
-        end_register: 24,
+        adress: 22,
         fields: [
             "Temperatura 1 : ",
             "Temperatura 2 : ",
@@ -61,7 +60,7 @@ const mapa_registrador = {
         ]
     },
     umidade: {
-        end_register: 29,
+        adress: 27,
         fields: [
             "Umidade: ",
             "Temperatura: ",
@@ -69,7 +68,7 @@ const mapa_registrador = {
         ]
     },
     motor: {
-        end_register: 38,
+        adress: 30,
         fields: [
             "Erro 1 : ",
             "Erro 2 : ",
@@ -84,7 +83,6 @@ const mapa_registrador = {
     }
 };
 
-// Função de conexão com o dispositivo Modbus
 async function conectarModbus() {
     try {
         await client.connectTCP(config.ip, { port: config.port });
@@ -95,57 +93,35 @@ async function conectarModbus() {
     }
 }
 
-// Função para ler dados de um dispositivo específico
-async function lerDispositivo(dispositivo) {
-    try {
-        const startAddress = dispositivo.end_register;
-        const quantity = dispositivo.fields.length;
-        
-        // Fazer a leitura dos registradores
-        const resposta = await client.readHoldingRegisters(startAddress, quantity);
-        
-        // Mapear os valores para os campos
-        const dados = {};
-        resposta.data.forEach((valor, index) => {
-            dados[dispositivo.fields[index]] = valor;
-        });
-        
-        return dados;
-    } catch (err) {
-        console.error(`Erro na leitura:`, err.message);
-        return null;
-    }
-}
 
-// Função principal para ler todos os dispositivos
 async function lerTodosDispositivos() {
     try {
-        // Verificar e reconectar se necessário
-        if (!client.isOpen) {
-            await conectarModbus();
-        }
+        if (!client.isOpen) await conectarModbus();
+        
 
-        // Iterar por todos os dispositivos do mapa
-        for (const [nomeDispositivo, dispositivo] of Object.entries(mapa_registrador)) {
-            const dados = await lerDispositivo(dispositivo);
+        const respostaGeral = await client.readHoldingRegisters(0, 39);
+        
+        // Mapear os dados para cada dispositivo
+        Object.entries(mapa_registrador).forEach(([nome, dispositivo]) => {
+            const dados = {};
+            dispositivo.fields.forEach((campo, index) => {
+                dados[campo] = respostaGeral.data[dispositivo.adress + index];
+            });
             
-            if (dados) {
-                console.log(`\n=== ${nomeDispositivo.toUpperCase()} ===`);  
-                Object.entries(dados).forEach(([campo, valor]) => {
-                    console.log(`${campo} ${valor}`);
-                });
-            }
-        }
+            console.log(`\n=== ${nome.toUpperCase()} ===`);
+            Object.entries(dados).forEach(([campo, valor]) => {
+                console.log(`${campo} ${valor}`);
+            });
+        });
     } catch (err) {
         console.error("Erro geral:", err.message);
     }
 }
 
-// Iniciar o ciclo de leitura
 console.log("Iniciando cliente Modbus...");
+
 setInterval(lerTodosDispositivos, config.tempo);
 
-// Lidar com encerramento
 process.on('SIGINT', () => {
     console.log("\nDesconectando...");
     client.close();
