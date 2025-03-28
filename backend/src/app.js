@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import modbusRoutes from './routes/modbusRoutes.js';
+import modbusRoutes from './routes/modbusRoutes.js'; // Importe as rotas corretas
 
 const app = express();
 

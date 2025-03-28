@@ -1,8 +1,14 @@
 import ModbusRTU from "modbus-serial";
 const client = new ModbusRTU();
 
+export default {
+    conectarModbus,
+    lerTodosDispositivos,
+    escreverDispositivo
+};
+
 const config = {
-    ip: "192.168.0.240",
+    ip: "192.168.0.210",
     port: 502,
     id: 99,
     tempo: 3000,
@@ -192,7 +198,7 @@ async function escreverDispositivo(dispositivo, config, valor) {
 console.log("Iniciando cliente Modbus...");
 
 setInterval(lerTodosDispositivos, config.tempo);
-await escreverDispositivo("motor", "Modo: ", 765);
+//await escreverDispositivo("motor", "Modo: ", 0);
 
 process.on('SIGINT', () => {
     console.log("\nDesconectando...");
