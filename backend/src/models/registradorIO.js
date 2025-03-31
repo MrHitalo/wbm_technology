@@ -11,7 +11,7 @@ const config = {
     ip: "192.168.0.210",
     port: 502,
     id: 99,
-    tempo: 3000,
+    tempo: 10000,
     inicio: 0,
     fim: 39
 };

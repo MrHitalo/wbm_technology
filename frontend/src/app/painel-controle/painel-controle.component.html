@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle</title>
+</head>
+<body>
+    <div class="dashboard">
+        <mat-card *ngFor="let device of devices" class="device-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>{{device.icon}}</mat-icon>
+            <mat-card-title>{{device.name}}</mat-card-title>
+            <mat-icon class="refresh-indicator" *ngIf="!device.data">cached</mat-icon>
+          </mat-card-header>
+      
+          <mat-card-content>
+            <div class="data-row" *ngFor="let item of device.data">
+              <span class="label">{{item.label}}:</span>
+              <span class="value">{{item.value}}</span>
+            </div>
+            
+            <div class="timestamp">
+              Última atualização: {{ now | date:'HH:mm:ss' }}
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+</body>
+</html>

@@ -1,4 +1,3 @@
-// routes/modbusRoutes.js
 import { Router } from 'express';
 import ModbusController from '../controllers/ModbusController.js';
 
