@@ -1,0 +1,5 @@
+Backend
+node app.js
+
+Frontend
+ng serve -o

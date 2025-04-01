@@ -7,7 +7,7 @@ import { Observable, interval, switchMap, startWith } from 'rxjs';
 })
 export class ModbusService {
   private apiUrl = 'http://localhost:3000/api/modbus';
-  private refreshInterval = 10000; 
+  private refreshInterval = 5000; 
 
   constructor(private http: HttpClient) { }
 
