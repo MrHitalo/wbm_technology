@@ -1,5 +1,9 @@
 Backend
-node app.js
+Rodar o back: node app.js
 
 Frontend
-ng serve -o
+Rodar o front: ng serve -o || npm start
+
+instalação bibliotecas extras:
+
+- Angular-Material: ng add @angular/material
