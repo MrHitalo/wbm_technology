@@ -1,0 +1,23 @@
+/* painel.component.scss */
+.container {
+    padding: 16px;
+  }
+  
+  mat-grid-list {
+    margin-top: 20px;
+    
+    mat-grid-tile {
+      app-card-equipamento {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  /* mat-grid-list {
+    display: flex;
+    justify-content: center; 
+    align-items: center;    
+    padding-bottom: 16px;
+  }
+   */

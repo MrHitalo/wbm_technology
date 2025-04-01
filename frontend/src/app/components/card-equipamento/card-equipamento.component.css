@@ -1,0 +1,35 @@
+/* seu-componente.component.scss */
+.custom-sized-card {
+    width: 400px; /* Largura exata */
+    height: 420px; /* Altura exata */
+    border-radius: 15px;
+    
+    mat-card-actions {
+        display: flex;
+        justify-content: center; /* Centraliza horizontalmente */
+        align-items: center;    /* Centraliza verticalmente (opcional) */ 
+        padding-bottom: 16px; /* Espaçamento inferior */
+      }
+    mat-card-header {
+        display: flex; /* Flexbox para centralizar o conteúdo */
+        justify-content: center; /* Centraliza horizontalmente */
+        align-items: center; /* Centraliza verticalmente (opcional) */
+        padding-top: 16px;
+    }
+      
+    /* Garante que o conteúdo não ultrapasse os limites */
+    overflow: auto;
+    
+    /* Layout flexível para manter o botão no rodapé */
+    display: flex;
+    flex-direction: column;
+    
+    mat-card-content {
+      flex: 1; /* Ocupa todo espaço disponível */
+      overflow: auto; /* Permite scroll se conteúdo for muito longo */
+    }
+    
+    mat-card-actions {
+      margin-top: auto; /* Empurra para baixo */
+    }
+  }

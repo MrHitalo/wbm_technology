@@ -1,15 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Central</title>
-</head>
-<body>  
-    <h1>Painel existente</h1>
-    <button mat-button>Meu Botão</button>
-    <button mat-raised-button color="primary">Clique Aqui</button>
+<!-- painel.component.html -->
+<app-header></app-header>
+<div class="container">
+  <h1>Painel Central</h1>
+  <mat-grid-list cols="3" rowHeight="1:0.9" >
+    <mat-grid-tile>
+      <app-card-equipamento titulo="Equipamento 1"></app-card-equipamento>
+    </mat-grid-tile>
+    
+    <mat-grid-tile>
+      <app-card-equipamento titulo="Equipamento 2"></app-card-equipamento>
+    </mat-grid-tile>
+    
+    <mat-grid-tile>
+      <app-card-equipamento titulo="Equipamento 3"></app-card-equipamento>
+    </mat-grid-tile>
+    
+    <mat-grid-tile>
+      <app-card-equipamento titulo="Equipamento 4"></app-card-equipamento>
+    </mat-grid-tile>
 
-    <h3>esfera</h3>
-</body>
-</html>
+    <mat-grid-tile>
+      <app-card-equipamento titulo="Equipamento 5"></app-card-equipamento>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <app-card-equipamento titulo="Equipamento 6"></app-card-equipamento>
+    </mat-grid-tile>
+
+  </mat-grid-list>
+</div>
