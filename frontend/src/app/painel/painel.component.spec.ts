@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PainelControleComponent } from './painel-controle.component';
+import { PainelComponent } from './painel.component';
 
-describe('PainelControleComponent', () => {
-  let component: PainelControleComponent;
-  let fixture: ComponentFixture<PainelControleComponent>;
+describe('PainelComponent', () => {
+  let component: PainelComponent;
+  let fixture: ComponentFixture<PainelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PainelControleComponent]
+      imports: [PainelComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PainelControleComponent);
+    fixture = TestBed.createComponent(PainelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

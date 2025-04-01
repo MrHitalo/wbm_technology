@@ -8,7 +8,7 @@ export default {
 };
 
 const config = {
-    ip: "192.168.0.210",
+    ip: "192.168.0.240",
     port: 502,
     id: 99,
     tempo: 10000,
@@ -152,17 +152,18 @@ async function lerTodosDispositivos() {
 
         const respostaGeral = await client.readHoldingRegisters(0, 39);
 
-        Object.entries(mapa_leitura).forEach(([nome, dispositivo]) => {
-            const dados = {};
-            dispositivo.fields.forEach((campo, index) => {
-                dados[campo] = respostaGeral.data[dispositivo.adress + index];
-            });
+        const dadosFormatados = {};
 
-            console.log(`\n=== ${nome.toUpperCase()} ===`);
-            Object.entries(dados).forEach(([campo, valor]) => {
-                console.log(`${campo} ${valor}`);
+        Object.entries(mapa_leitura).forEach(([nomeDispositivo, dispositivo]) => {
+            dadosFormatados[nomeDispositivo] = {};
+
+            dispositivo.fields.forEach((campo, index) => {
+                const endereco = dispositivo.adress + index;
+                dadosFormatados[nomeDispositivo][campo.trim()] = respostaGeral.data[endereco];
             });
         });
+
+        return dadosFormatados;
     } catch (err) {
         console.error("Erro geral:", err.message);
     }
@@ -179,14 +180,14 @@ async function escreverDispositivo(dispositivo, config, valor) {
 
         const campos = mapa_escrita[dispositivo].fields;
         const index = campos.indexOf(config);
-        
+
         if (index === -1) {
             console.error(`Configuração "${config}" não existe no dispositivo ${dispositivo}!`);
             return;
         }
 
         const registrador = mapa_escrita[dispositivo].adress + index;
-        
+
         await client.writeRegister(registrador, valor);
         console.log(`Valor ${valor} escrito com sucesso no registrador ${registrador} (${dispositivo} - ${config})`);
 

@@ -3,10 +3,18 @@ import registradorIO from '../models/registradorIO.js';
 class ModbusController {
   static async getData(req, res) {
     try {
-      await registradorIO.lerTodosDispositivos();
-      res.json({ message: "Dados lidos com sucesso" });
+      const dados = await registradorIO.lerTodosDispositivos();
+      res.json({
+        success: "Sucesso!",
+        data: dados
+      });
+  
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({
+        success: false,
+        error: err.message,
+        detalhes: "Falha na comunicação com o hardware"
+      });
     }
   }
 
