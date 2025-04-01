@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './painel.component.css'
 })
 export class PainelComponent {
-
+  
 }

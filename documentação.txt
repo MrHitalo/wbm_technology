@@ -7,3 +7,6 @@ Rodar o front: ng serve -o || npm start
 instalação bibliotecas extras:
 
 - Angular-Material: ng add @angular/material
+
+criar novo componente
+ng g c nome_componente
