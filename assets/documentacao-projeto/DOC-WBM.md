@@ -15,12 +15,12 @@
 | Hitalo             | Desenvolvedor                            |
 | Matheus            | Encarregado do acompanhamento do projeto |
 
-## Pauta
+## Ações e comandos 
 
-| Ação(ou resultado obtido) | Comando                                  |
-| ------------------------- | ---------------------------------------- |
-| Rodar o back              | Desenvolvedor                            |
-| Rodar o front             | Desenvolvedor                            |
-| Criar componente          | Encarregado do acompanhamento do projeto |
+| Ação(ou resultado obtido) | Comando                                  | diretório
+| ------------------------- | ---------------------------------------- | ----------------------------------------
+| Rodar o back              | Desenvolvedor                            | Encarregado do acompanhamento do projeto |
+| Rodar o front             | Desenvolvedor                            | Encarregado do acompanhamento do projeto |
+| Criar componente          | Encarregado do acompanhamento do projeto | Encarregado do acompanhamento do projeto |
 
 
