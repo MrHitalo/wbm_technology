@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { PainelComponent } from './painel/painel.component';
+import { PainelComponent } from './pages/painel/painel.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
 @Component({

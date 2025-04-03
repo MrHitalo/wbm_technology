@@ -17,10 +17,18 @@
 
 ## Ações e comandos 
 
-| Ação(ou resultado obtido) | Comando                                  | diretório
-| ------------------------- | ---------------------------------------- | ----------------------------------------
-| Rodar o back              | Desenvolvedor                            | Encarregado do acompanhamento do projeto |
-| Rodar o front             | Desenvolvedor                            | Encarregado do acompanhamento do projeto |
-| Criar componente          | Encarregado do acompanhamento do projeto | Encarregado do acompanhamento do projeto |
+| Ação(ou resultado obtido) | Comando                                  | diretório                                |
+| ------------------------- | ---------------------------------------- | ---------------------------------------- |
+| Rodar o back              | node app.js                              | backend\src                              |
+| Rodar o front             | ng serve -o /ou/ npm start               | frontend                                 |
+| Criar componente          | ng g c nome_componente                   | frontend                                 |
+
+## Alterações de css
+
+| comando            | resultado da mudança                     |
+| ------------------ | ---------------------------------------- |
+| primary(color)     | cinza padrão WBM                         |
+| Succes             | Verde claro WBM                          |
+| Matheus            | Encarregado do acompanhamento do projeto |
 
 

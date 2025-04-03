@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { CardEquipamentoComponent } from '../components/card-equipamento/card-equipamento.component';
+import { CardEquipamentoComponent } from '../../components/card-equipamento/card-equipamento.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
