@@ -177,7 +177,7 @@ async function lerEsfera() {
       const response = await client.readHoldingRegisters(mapa_leitura.esfera.adress, mapa_leitura.gaveta.adress - 1);
   
       const dadosEsfera = {};
-      
+    
       mapa_leitura.esfera.fields.forEach((campo, index) => {
         const valor = response.data[index];
         dadosEsfera[campo.trim()] = valor;
