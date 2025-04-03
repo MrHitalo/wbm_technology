@@ -1,8 +1,26 @@
 <!-- painel.component.html -->
 <app-header></app-header>
 <div class="container">
-  <h1>Painel Central</h1>
+  <h1 style="text-align: center;">Painel Central</h1>
   <mat-grid-list cols="3" rowHeight="1:0.9" >
+        
+    <div *ngIf="carregando" class="loading">
+      <p>Carregando dados...</p>
+    </div>
+  
+    <div *ngIf="erroCarregamento" class="error">
+      {{ erroCarregamento }}
+    </div>
+
+    <mat-grid-tile *ngIf="!carregando && !erroCarregamento" >
+      <app-card-equipamento *ngFor="let dispositivo of dispositivosFormatados">
+        
+      </app-card-equipamento>
+    </mat-grid-tile>
+
+    
+
+
     <mat-grid-tile>
       <app-card-equipamento titulo="Equipamento 1"></app-card-equipamento>
     </mat-grid-tile>
