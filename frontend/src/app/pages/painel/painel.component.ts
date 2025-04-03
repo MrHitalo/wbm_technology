@@ -33,7 +33,7 @@ export class PainelComponent implements OnInit {
   }
 
   public carregarDados() {
-    this.http.get<{ data: any }>('http://localhost:3000/api/modbus/data').subscribe({
+    this.http.get<{ data: any }>('http://localhost:3000/moduloMestre/todos').subscribe({
       next: (res) => {
         this.dadosModbus = res.data;
         this.dispositivosFormatados = Object.entries(res.data).map(([key, value]) => ({

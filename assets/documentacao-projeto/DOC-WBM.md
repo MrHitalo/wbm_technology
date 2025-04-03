@@ -27,8 +27,9 @@
 
 | comando            | resultado da mudança                     |
 | ------------------ | ---------------------------------------- |
-| primary(color)     | cinza padrão WBM                         |
-| Succes             | Verde claro WBM                          |
-| Matheus            | Encarregado do acompanhamento do projeto |
+| $gray-900          | cinza padrão WBM                         |
+| $green             | Verde claro WBM                          |
+| $warning           | azul cor de link                         | 
+| $primary           | estilo cinza wbm                         | 
 
 
