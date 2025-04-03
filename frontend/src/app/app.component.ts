@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';import { PainelComponent } from './painel/painel.component';
-import { HeaderComponent } from './components/header/header.component';
-import { TodosDispositivosComponent } from './painel/todos-dispositivos/todos-dispositivos.component';
-;
+import { RouterOutlet } from '@angular/router';
+import { PainelComponent } from './painel/painel.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,PainelComponent,HeaderComponent, TodosDispositivosComponent],
+  imports: [RouterOutlet,PainelComponent,NavbarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
