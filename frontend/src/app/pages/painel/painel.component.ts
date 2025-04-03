@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { CardEquipamentoComponent } from '../components/card-equipamento/card-equipamento.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CardEquipamentoComponent } from '../../components/card-equipamento/card-equipamento.component';
 
 interface Dispositivo {
   key: string;
@@ -14,12 +14,12 @@ interface Dispositivo {
 
 @Component({
   selector: 'app-painel',
-  imports: [MatButtonModule, CardEquipamentoComponent, MatGridListModule, CommonModule, MatIconModule,  MatProgressSpinnerModule],
+  imports: [MatButtonModule, CardEquipamentoComponent , MatGridListModule, CommonModule, MatIconModule,  MatProgressSpinnerModule],
   templateUrl: './painel.component.html', 
   styleUrls: ['./painel.component.css'] 
 
 })
-export class PainelComponent implements OnInit{ 
+export class PainelComponent implements OnInit { 
 
   dadosModbus: { [key: string]: { [key: string]: number } } = {};
   dispositivosFormatados: Dispositivo[] = [];
