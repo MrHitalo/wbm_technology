@@ -9,5 +9,5 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './card-equipamento.component.css'
 })
 export class CardEquipamentoComponent {
-  @Input() titulo: string = 'Título Padrão';
+  @Input() titulo: string = 'Equipamento';
 }

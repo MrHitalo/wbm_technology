@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { CardEquipamentoComponent } from '../components/card-equipamento/card-equipamento.component';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { CardEquipamentoComponent } from '../components/card-equipamento/card-equipamento.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 interface Dispositivo {
   key: string;
@@ -12,11 +14,12 @@ interface Dispositivo {
 
 @Component({
   selector: 'app-painel',
-  imports: [MatButtonModule, CardEquipamentoComponent, MatGridListModule, CommonModule], // Importando corretamente o módulo do botão
-  templateUrl: './painel.component.html',
-  styleUrls: ['./painel.component.css'] // Nome correto da propriedade
+  imports: [MatButtonModule, CardEquipamentoComponent, MatGridListModule, CommonModule, MatIconModule,  MatProgressSpinnerModule],
+  templateUrl: './painel.component.html', 
+  styleUrls: ['./painel.component.css'] 
+
 })
-export class PainelComponent { 
+export class PainelComponent implements OnInit{ 
 
   dadosModbus: { [key: string]: { [key: string]: number } } = {};
   dispositivosFormatados: Dispositivo[] = [];
@@ -29,7 +32,7 @@ export class PainelComponent {
     this.carregarDados();
   }
 
-  private carregarDados() {
+  public carregarDados() {
     this.http.get<{ data: any }>('http://localhost:3000/api/modbus/data').subscribe({
       next: (res) => {
         this.dadosModbus = res.data;
@@ -40,9 +43,9 @@ export class PainelComponent {
         this.carregando = false;
       },
       error: (err) => {
-        this.erroCarregamento = 'Falha ao conectar com o servidor Modbus';
+        this.erroCarregamento = 'Falha ao conectar com o servidor Modbus. Tente recarregar a página.';
         this.carregando = false;
-        console.error('Erro:', err);
+        console.error('Erro detalhado:', err);
       }
     });
   }

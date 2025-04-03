@@ -1,20 +1,44 @@
-<!-- painel.component.html -->
-  <h1 style="text-align: center;">Painel Central</h1>
-  <mat-grid-list cols="3" rowHeight="1:0.9" >
-        
-    <div *ngIf="carregando" class="loading">
-      <p>Carregando dados...</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1 style="text-align: center; margin: 20px 0;">Painel Central</h1>
+
+  <mat-grid-list cols="3" rowHeight="500px">
+    <div class="container">
+
+      <div *ngIf="carregando" class="loading">  
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Carregando dados dos equipamentos...</p>
+      </div>
+
+      <div *ngIf="erroCarregamento" class="error">
+        <mat-icon>error_outline</mat-icon>
+        <p>{{ erroCarregamento }}</p>
+        <button mat-raised-button color="warn" (click)="carregarDados()">
+          Tentar novamente
+        </button>
+      </div>
+
+      <mat-grid-tile *ngFor="let dispositivo of dispositivosFormatados">
+        <app-card-equipamento [titulo]="dispositivo.key">
+          <div class="card-content">
+            <div *ngFor="let campo of dispositivo.value | keyvalue" class="campo">
+              <span class="label">{{ campo.key }}:</span>
+              <span class="valor">{{ formatarValor(campo.value) }}</span>
+            </div>
+          </div>
+        </app-card-equipamento>
+      </mat-grid-tile>
+
     </div>
-  
-    <div *ngIf="erroCarregamento" class="error">
-      {{ erroCarregamento }}
-    </div>
-
-    <mat-grid-tile *ngIf="!carregando && !erroCarregamento" >
-      <app-card-equipamento *ngFor="let dispositivo of dispositivosFormatados">
-        
-      </app-card-equipamento>
-    </mat-grid-tile>
-
-
   </mat-grid-list>
+</body>
+
+</html>
