@@ -11,7 +11,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use('/api/modbus', modbusRoutes);
+app.use('/moduloMestre', modbusRoutes);
 
 const PORT = 3000;
 app.listen(PORT, () => {

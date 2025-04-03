@@ -4,7 +4,8 @@ const client = new ModbusRTU();
 export default {
     conectarModbus,
     lerTodosDispositivos,
-    escreverDispositivo
+    escreverDispositivo,
+    lerEsfera
 };
 
 const config = {
@@ -168,6 +169,27 @@ async function lerTodosDispositivos() {
         console.error("Erro geral:", err.message);
     }
 }
+
+async function lerEsfera() {
+    try {
+      if (!client.isOpen) await conectarModbus();
+      
+      const response = await client.readHoldingRegisters(mapa_leitura.esfera.adress, mapa_leitura.gaveta.adress - 1);
+  
+      const dadosEsfera = {};
+      
+      mapa_leitura.esfera.fields.forEach((campo, index) => {
+        const valor = response.data[index];
+        dadosEsfera[campo.trim()] = valor;
+      });
+  
+      return dadosEsfera;
+      
+    } catch (err) {
+      console.error("Erro ao ler esfera:", err.message);
+      throw err;
+    }
+  }
 
 async function escreverDispositivo(dispositivo, config, valor) {
     try {

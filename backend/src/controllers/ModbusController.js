@@ -18,6 +18,23 @@ class ModbusController {
     }
   }
 
+  static async getEsfera(req, res){
+    try{
+      const dados = await registradorIO.lerEsfera();
+      res.json({
+        success: "Sucesso!",
+        data: dados
+      });
+    } catch(err) {
+      res.status(500).json({
+        success: false,
+        error: err.message,
+        detalhes: "Falha na comunicação com o hardware"
+      })
+    }
+
+  }
+
   static async writeData(req, res) {
     const { device, config, value } = req.body;
     try {
