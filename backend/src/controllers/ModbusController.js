@@ -35,6 +35,39 @@ class ModbusController {
 
   }
 
+  static async getGaveta(req, res){
+    try{
+      const dados = await registradorIO.lerGaveta();
+      res.json({
+        success: "Sucesso!",
+        data: dados
+      });
+    } catch(err) {
+      res.status(500).json({
+        success: false,
+        error: err.message,
+        detalhes: "Falha na comunicação com o hardware"
+      })
+    }
+  }
+
+  static async getAr(req, res){
+    try{
+      const dados = await registradorIO.lerAr();
+      res.json({
+        success: "Sucesso!",
+        data: dados
+      });
+    } catch(err) {
+      res.status(500).json({
+        success: false,
+        error: err.message,
+        detalhes: "Falha na comunicação com o hardware"
+      })
+    }
+  }
+
+
   static async writeData(req, res) {
     const { device, config, value } = req.body;
     try {

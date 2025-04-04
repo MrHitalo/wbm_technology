@@ -5,14 +5,16 @@ export default {
     conectarModbus,
     lerTodosDispositivos,
     escreverDispositivo,
-    lerEsfera
+    lerEsfera,
+    lerGaveta,
+    lerAr
 };
 
 const config = {
     ip: "192.168.0.240",
     port: 502,
     id: 99,
-    tempo: 10000,
+    tempo: 2000,
     inicio: 0,
     fim: 39
 };
@@ -164,7 +166,12 @@ async function lerTodosDispositivos() {
             });
         });
 
-        return dadosFormatados;
+        const esfera = await lerEsfera();
+        const gaveta = await lerGaveta();
+        const ar = await lerAr();
+
+        return { ...dadosFormatados, esfera, gaveta, ar };
+
     } catch (err) {
         console.error("Erro geral:", err.message);
     }
@@ -172,15 +179,13 @@ async function lerTodosDispositivos() {
 
 async function lerEsfera() {
     try {
-      if (!client.isOpen) await conectarModbus();
       
-      const response = await client.readHoldingRegisters(mapa_leitura.esfera.adress, mapa_leitura.gaveta.adress - 1);
+      const response = await client.readHoldingRegisters(0, 8);
   
       const dadosEsfera = {};
     
-      mapa_leitura.esfera.fields.forEach((campo, index) => {
-        const valor = response.data[index];
-        dadosEsfera[campo.trim()] = valor;
+      mapa_leitura.esfera.fields.forEach((campo, index) => {;
+        dadosEsfera[campo.trim()] = response.data[index];
       });
   
       return dadosEsfera;
@@ -190,6 +195,44 @@ async function lerEsfera() {
       throw err;
     }
   }
+
+async function lerGaveta() {
+    try {
+
+
+        const response = await client.readHoldingRegisters(9, 17);
+
+        const dadosGaveta = {};
+
+        mapa_leitura.gaveta.fields.forEach((campo, index) => {
+            dadosGaveta[campo.trim()] = response.data[index];
+        });
+
+        return dadosGaveta;
+
+    } catch (err) {
+        console.error("Erro ao ler gaveta:", err.message);
+        throw err;
+    }
+}
+
+async function lerAr() {
+    try {
+
+        const response = await client.readHoldingRegisters(18,21);
+        const dadosAr = {};
+
+        mapa_leitura.ar.fields.forEach((campo, index) => {
+            dadosAr[campo.trim()] = response.data[index];
+        });
+
+        return dadosAr;
+
+    } catch (err) {
+        console.error("Erro ao ler ar:", err.message);
+        throw err;
+    }
+}
 
 async function escreverDispositivo(dispositivo, config, valor) {
     try {
@@ -219,9 +262,8 @@ async function escreverDispositivo(dispositivo, config, valor) {
 }
 
 console.log("Iniciando cliente Modbus...");
-
 setInterval(lerTodosDispositivos, config.tempo);
-//await escreverDispositivo("motor", "Modo: ", 0);
+
 
 process.on('SIGINT', () => {
     console.log("\nDesconectando...");
