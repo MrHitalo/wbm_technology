@@ -1,15 +1,28 @@
 import { Routes } from '@angular/router';
 import { PainelComponent } from './pages/painel/painel.component';
-import { Component } from '@angular/core';
-import { EquipamentoComponent } from './pages/equipamento/equipamento.component';
+import { EsferaComponent } from './pages/equipamento/esfera/esfera.component';
+import { GavetaComponent } from './pages/equipamento/gaveta/gaveta.component';
+import { ArComponent } from './pages/equipamento/ar/ar.component';
 
 export const routes: Routes = [
     {
-        path:'',
+        path: '',
         component: PainelComponent
     },
     {
-        path:'equipamento',
-        component: EquipamentoComponent
+        path: 'equipamento/esfera',
+        component: EsferaComponent
+    },
+    {
+        path: 'equipamento/gaveta',
+        component: GavetaComponent
+    },
+    {
+        path: 'equipamento/ar',
+        component: ArComponent
+    },
+    {
+        path: '**',
+        redirectTo: '' // Redireciona para o painel em caso de rota inválida
     }
 ];

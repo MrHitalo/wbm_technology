@@ -1,11 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-configuracoes-alimentador',
-  imports: [],
   templateUrl: './configuracoes-alimentador.component.html',
-  styleUrl: './configuracoes-alimentador.component.css'
+  styleUrls: ['./configuracoes-alimentador.component.css']
 })
-export class ConfiguracoesAlimentadorComponent {
+export class ConfiguracoesAlimentadorComponent implements OnInit {
+  equipamentoId!: string;
 
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.equipamentoId = this.route.snapshot.paramMap.get('id') || '';
+    console.log('ID do equipamento:', this.equipamentoId);
+  }
 }

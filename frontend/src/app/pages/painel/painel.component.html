@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Painel</title>
 </head>
 
 <body>
@@ -13,7 +13,7 @@
   <mat-grid-list cols="3" rowHeight="500px">
     <div class="container">
 
-      <div *ngIf="carregando" class="loading">  
+      <div *ngIf="carregando" class="loading">
         <mat-spinner diameter="50"></mat-spinner>
         <p>Carregando dados dos equipamentos...</p>
       </div>
@@ -26,16 +26,25 @@
         </button>
       </div>
 
-      <mat-grid-tile *ngFor="let dispositivo of dispositivosFormatados">
-        <app-card-equipamento [titulo]="dispositivo.key">
-          <div class="card-content">
-            <div *ngFor="let campo of dispositivo.value | keyvalue" class="campo">
-              <span class="label">{{ campo.key }}:</span>
-              <span class="valor">{{ formatarValor(campo.value) }}</span>
-            </div>
-          </div>
-        </app-card-equipamento>
-      </mat-grid-tile>
+      <div *ngIf="!carregando && !erroCarregamento">
+        <div class="grid-item" *ngFor="let dispositivo of dispositivosFormatados">
+          <mat-card class="custom-sized-card">
+            <mat-card-header>
+              <mat-card-title>{{ dispositivo.key }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p *ngFor="let item of dispositivo.value | keyvalue">
+                {{ item.key }}: {{ item.value }}
+              </p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="primary" (click)="verDetalhesEquipamento(dispositivo.key)">
+                Ver Detalhes
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
 
     </div>
   </mat-grid-list>

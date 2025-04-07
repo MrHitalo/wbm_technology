@@ -20,7 +20,17 @@
    .container {
     padding: 20px;
     width: 100%;
+    max-width: 800px; /* Largura máxima do container */
+    margin: auto; /* Centralizar a página */    
   }
+
+  .card {
+    background-color: #f8f9fa; /* Cor de fundo suave */
+    border: 1px solid #dee2e6; /* Borda padrão */
+    border-radius: 0.5rem; /* Bordas arredondadas */
+    padding: 1rem; /* Espaçamento interno */
+    margin-bottom: 1rem; /* Espaçamento entre os cards */
+}
   
   .loading {
     text-align: center;
