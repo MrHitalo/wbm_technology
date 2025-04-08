@@ -26,10 +26,10 @@ export default function Painel() {
               className="bg-white rounded-2xl shadow-md p-4 text-center text-black flex flex-col justify-between h-80"
             >
               <Link
-                to={`/${device.name.toLowerCase()}`} 
+                to={`/${device.name.toLowerCase()}`} // Redireciona para a rota dinâmica
                 className="bg-gray-800 text-white py-2 px-4 rounded-lg mb-4 block text-center"
-                >
-                  Abrir Configuração
+              >
+                Abrir Configuração
               </Link>
 
               <div className="flex-1 flex items-center justify-center mb-4">
