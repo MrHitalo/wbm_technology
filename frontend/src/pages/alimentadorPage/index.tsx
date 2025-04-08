@@ -1,113 +1,154 @@
 import React from "react";
+// componentes
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { Bar, Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
 import { ChevronDown } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import TabelaDeErros from "./TabelaDeErros";
+import alimentador from "../../assets/alimentador.png"
+import ConfiguracoesAlimentador from "./ConfiguracoesAlimentador";
 
-const COLORS = ["#00C49F", "#FF8042"];
 
-const data1 = [
-  { name: "Temperatura", value: 2040 },
-  { name: "Restante", value: 960 },
-];
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { Context as ChartDataLabelsContext } from 'chartjs-plugin-datalabels';
 
-const data2 = [
-  { name: "Quantidade", value: 640 },
-  { name: "Restante", value: 360 },
+
+
+ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ChartDataLabels);
+
+const dataTemperatura = {
+  labels: ["Temperatura"],
+  datasets: [
+    {
+      data: [30, 10],
+      backgroundColor: ["#00C49F", "#FF4444"],
+      borderWidth: 1,
+    },
+  ],
+};
+
+const dataQuantidadeporc = {
+    labels: ["Quantidade", "Restante"],
+    datasets: [
+      {
+        data: [2040, 960],
+        backgroundColor: ["#00C49F", "#FF8042"],
+        borderWidth: 1,
+      },
+    ],
+  };
+  
+  const optionsQuantidade = {
+    plugins: {
+      datalabels: {
+        color: '#fff',
+        formatter: (value: number, context: any) => {
+          const data: number[] = context.chart.data.datasets[0].data;
+          const total = data.reduce((a, b) => a + b, 0);
+          const percentage = ((value / total) * 100).toFixed(1);
+          return `${percentage}%`;
+        },
+      } as any,
+      legend: {
+        position: 'bottom' as const,
+        labels: {
+          color: "#fff",
+        },
+      },
+    },
+  };
+  
+
+const dataQuantidade = {
+  labels: ["Quantidade"],
+  datasets: [
+    {
+      data: [2040, 960],
+      backgroundColor: ["#00C49F", "#FF8042"],
+      borderWidth: 1,
+    },
+  ],
+};
+
+const erros = [
+  { titulo: "Sem Conexão", detalhe: "11 alimentadores" },
+  { titulo: "Motor Não Funcionando", detalhe: "9 alimentadores" },
+  { titulo: "Sensor de Temperatura com Defeito", detalhe: "8 alimentadores"},
+  { titulo: "Motor Travou", detalhe: "7 alimentadores" },
+  { titulo: "Alimentador Trava", detalhe: "6 alimentadores" },
+  { titulo: "Alimentador Vazio", detalhe: "5 alimentadores" },
+  { titulo: "Alimentador Quantidade Baixa", detalhe: "4 alimentadores" },
 ];
 
 export default function Alimentador() {
   return (
     <>
-          <Navbar />
-
-    <div className="min-h-screen bg-gray-900 text-white p-4 space-y-4">
-
-      <div className="grid grid-cols-1 gap-4">
-        {/* Gráfico Temperatura */}
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-6">
-            <h2 className="font-bold text-lg mb-4">Temperatura</h2>
-            <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
-                <Pie data={data1} dataKey="value" outerRadius={60}>
-                  {data1.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Gráfico Quantidade */}
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-6">
-            <h2 className="font-bold text-lg mb-4">Quantidade</h2>
-            <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
-                <Pie data={data2} dataKey="value" outerRadius={60}>
-                  {data2.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Configurações do Alimentador */}
-        <Card>
-          <CardContent className="space-y-4">
-            <h2 className="font-bold text-center text-lg">CONFIGURAÇÕES DO ALIMENTADOR</h2>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div className="space-y-1">
-                <label>HORA LIGA CONFIGURADA</label>
-                <div className="p-2 bg-gray-800 rounded">--:--</div>
-              </div>
-              <div className="space-y-1">
-                <label>HORA DESLIGA CONFIGURADA</label>
-                <div className="p-2 bg-gray-800 rounded">--:--</div>
-              </div>
-              <div className="space-y-1">
-                <label>TEMPO CICLO</label>
-                <div className="p-2 bg-gray-800 rounded">0</div>
-              </div>
-              <div className="space-y-1">
-                <label>QUANTIDADE POR CICLO(KG)</label>
-                <div className="p-2 bg-gray-800 rounded">0</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Tabela de Erros */}
-        <Card>
-          <CardContent className="space-y-2 text-sm">
-            <h2 className="font-bold text-center text-lg">Tabela de Erros</h2>
-            <div className="grid grid-cols-2 gap-2">
-              <div>Sem Conexão</div>
-              <div className="text-right">✖</div>
-              <div>Motor Não Funcionando</div>
-              <div className="text-right">✖</div>
-              <div>Sensor de Temperatura com Defeito</div>
-              <div className="text-right">✖</div>
-              <div>Motor Travou</div>
-              <div className="text-right">✖</div>
-              <div>Alimentador Trava</div>
-              <div className="text-right">✖</div>
-              <div>Alimentador Vazio</div>
-              <div className="text-right">✖</div>
-              <div>Alimentador Quantidade Baixa</div>
-              <div className="text-right">✖</div>
-            </div>
+      <Navbar />
+      {/* Card equipamento */}
+      <div className="absolute right-0 ">
+        <Card className="w-64 shadow-lg rounded-none border-b-emerald-400 border-l-emerald-400 border-3">
+          <CardContent className="p-3 pt-1 flex flex-col items-center space-y-3">
+            <img
+              src={alimentador}
+              alt="Alerta"
+              className="w-full h-36 object-contain"
+            />
+            <h3 className="font-semibold text-lg text-center leading-snug">
+              Alimentador Control Feed
+            </h3>
+            <Button className="w-full">Configurar</Button>
           </CardContent>
         </Card>
       </div>
-    </div>
-    <Footer />
+
+      <div className="min-h-screen bg-gray-900 text-white p-4">
+        <div className="max-w-5xl mx-auto space-y-4">
+          {/* Grafico de temperatura */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
+                      <Card>
+                          <CardContent className="p-4 flex flex-col items-center">
+                              <h2 className="font-bold text-lg mb-2 text-center">Temperatura</h2>
+                              <div className="flex items-center justify-center w-full">
+                                  <div className="w-64 h-64">
+                                      <Doughnut data={dataTemperatura} />
+                                  </div>
+                              </div>
+                          </CardContent>
+                      </Card>
+                  </div>
+
+
+          {/* Graficos de Quantidade */}
+                  <Card className="mt-10">
+                      <CardContent className="p-4 flex flex-col items-center">
+                          <h2 className="font-bold text-lg mb-6 text-center">Quantidade</h2>
+                          <div className="flex flex-col sm:flex-row items-center justify-center gap-50">
+                              <div className="w-80 h-80">
+                                    <Doughnut data={dataQuantidadeporc} options={optionsQuantidade} />
+                              </div>
+                              <div className="w-80 h-80">
+                                  <Doughnut data={dataQuantidade} />
+                              </div>
+                          </div>
+                      </CardContent>
+                  </Card>
+
+
+
+            {/* Configurações Do Alimentador*/}
+            <ConfiguracoesAlimentador />
+
+            {/* Nova Tabela de Erros*/}
+            <div className="mb-20">
+            <TabelaDeErros tituloTabela="Erros do Alimentador" erros={erros} />
+            </div>
+
+        </div>
+      </div>             
+      <Footer />
     </>
   );
 }

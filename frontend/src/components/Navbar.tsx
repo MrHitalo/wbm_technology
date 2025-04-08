@@ -1,13 +1,13 @@
 import React from "react";
 import logoOfc from "../assets/LOGO-OFC-WBM.png"; // Caminho relativo correto
+import logo from "../assets/logo.png";
 
 export default function Navbar() {
   return (
-    <header className="bg-white shadow-md py-4 px-6 flex justify-between items-center w-full">
+    <header className="bg-white shadow-md py-4 px-6 flex justify-between items-center w-full ">
       {/* Logo + título */}
       <div className="flex items-center gap-3">
-        <img src={logoOfc} alt="Logo WBM" className="h-20 w-auto" />
-        <span className="text-gray-700 font-medium text-lg">Tela inicial WBM</span>
+        <img src={logo} alt="Logo WBM" className="h-15 w-auto" />
       </div>
 
       {/* Botão de ação */}
