@@ -2,6 +2,7 @@ import React from "react";
 import logoOfc from "../../assets/LOGO-OFC-WBM.png";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import logo from "../../assets/logo.png";
 
 const devices = [
   { name: "Control Flow Esfera" },
