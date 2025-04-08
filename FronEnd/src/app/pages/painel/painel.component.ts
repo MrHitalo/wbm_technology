@@ -62,7 +62,8 @@ export class PainelComponent implements OnInit {
         console.error('Erro detalhado:', err);
       }
     });
-  }
+    }
+
   verDetalhesEquipamento(idEquipamento: string) {
     console.log('Método chamado com ID do equipamento:', idEquipamento);
     switch (idEquipamento) {
