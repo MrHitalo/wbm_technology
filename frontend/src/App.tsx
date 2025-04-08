@@ -10,6 +10,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Painel/>,
   },
+  {
+    path: "/:device",
+    element: <Painel/>,
+  }
 ]);
 
 function App() {
