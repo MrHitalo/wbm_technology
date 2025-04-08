@@ -6,7 +6,7 @@ export default function Navbar() {
     <header className="bg-white shadow-md py-4 px-6 flex justify-between items-center w-full">
       {/* Logo + título */}
       <div className="flex items-center gap-3">
-        <img src={logoOfc} alt="Logo WBM" className="h-10 w-auto" />
+        <img src={logoOfc} alt="Logo WBM" className="h-20 w-auto" />
         <span className="text-gray-700 font-medium text-lg">Tela inicial WBM</span>
       </div>
 

@@ -1,37 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import logoOfc from "../../assets/LOGO-OFC-WBM.png";
 import Navbar from "../../components/Navbar";
-import { fetchTodos } from "../../service/deviceService";
+import Footer from "../../components/Footer";
 
+const devices = [
+  { name: "Control Flow Esfera" },
+  { name: "Control Flow Gaveta" },
+  { name: "Control Ar" },
+  { name: "Monitor Umidade" },
+  { name: "Alimentador Control-Feed" },
+  { name: "Monitor Temperatura" },
+];
 
 export default function Painel() {
-  const [devices, setDevices] = useState<{name: string ; value: any; }[]>([]);  // Estado para armazenar os dispositivos    
-  const [loading, setLoading] = useState(true); // Estado para indicar carregamento
-  const [error, setError] = useState(""); // Estado para erros
-
-  useEffect(() => {
-    const fetchDevices = async () => {
-      try {
-        const data = await fetchTodos();   
-        console.log("Dispositivos:", data);
-        setDevices(data.map((device: { name: string; value: unknown }) => ({
-          value: device.value,
-          name: device.name || "Dispositivo sem nome", 
-        })));
-        setLoading(false); 
-      } catch (err) {
-        setError("Erro ao carregar os dispositivos."); 
-        setLoading(false); 
-      }
-    };
-
-    fetchDevices();
-  }, []);
-
   return (
     <>
       <Navbar />
-
+      
       <div className="min-h-screen bg-gray-900 text-white p-6">
         <h1 className="text-3xl font-bold mb-6">Painel de Dispositivos</h1>
 
@@ -48,7 +33,7 @@ export default function Painel() {
               <div className="flex-1 flex items-center justify-center mb-4">
                 <img
                   src={logoOfc}
-                  alt={device.name || "Dispositivo sem nome"}
+                  alt={device.name}
                   className="max-h-32 object-contain"
                 />
               </div>
@@ -58,6 +43,7 @@ export default function Painel() {
           ))}
         </div>
       </div>
+      <Footer />
     </>
   );
 }
