@@ -1,23 +1,21 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import logoOfc from "../../assets/LOGO-OFC-WBM.png";
 import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-import logo from "../../assets/logo.png";
-
-const devices = [
-  { name: "Control Flow Esfera" },
-  { name: "Control Flow Gaveta" },
-  { name: "Control Ar" },
-  { name: "Monitor Umidade" },
-  { name: "Alimentador Control-Feed" },
-  { name: "Monitor Temperatura" },
-];
 
 export default function Painel() {
+  const devices = [
+    { name: "Esfera", description: "Configuração da esfera" },
+    { name: "Gaveta", description: "Configuração da gaveta" },
+    { name: "Ar", description: "Configuração do ar" },
+    { name: "Temperatura", description: "Configuração da temperatura" },
+    { name: "Umidade", description: "Configuração da umidade" },
+    { name: "Motor", description: "Configuração do motor" },
+  ];
+
   return (
     <>
       <Navbar />
-      
+
       <div className="min-h-screen bg-gray-900 text-white p-6">
         <h1 className="text-3xl font-bold mb-6">Painel de Dispositivos</h1>
 
@@ -27,24 +25,25 @@ export default function Painel() {
               key={idx}
               className="bg-white rounded-2xl shadow-md p-4 text-center text-black flex flex-col justify-between h-80"
             >
-              <button className="bg-gray-800 text-white py-2 px-4 rounded-lg mb-4">
-                Abrir Configurações
-              </button>
+              <Link
+                to={`/${device.name.toLowerCase()}`} // Redireciona para a rota dinâmica
+                className="bg-gray-800 text-white py-2 px-4 rounded-lg mb-4 block text-center"
+              >
+                Abrir Configuração
+              </Link>
 
               <div className="flex-1 flex items-center justify-center mb-4">
                 <img
                   src={logoOfc}
-                  alt={device.name}
+                  alt={device.name || "Dispositivo sem nome"}
                   className="max-h-32 object-contain"
                 />
               </div>
-
               <p className="font-medium">{device.name}</p>
             </div>
           ))}
         </div>
       </div>
-      <Footer />
     </>
   );
 }
