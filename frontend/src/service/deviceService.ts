@@ -22,11 +22,13 @@ export const serverConnection = async () => {
 export const fetchTodos = async () => {
   try {
     const response = await axios.get(`${BASE_URL}${ENDPOINTS.TODOS}`);
-    const devicesArray = Object.entries(response.data.data).map(([name, value]) => ({
-      name, 
-      value, 
-    }));
-    return devicesArray; 
+    const devicesArray = Object.entries(response.data.data).map(
+      ([name, value]) => ({
+        name,
+        value,
+      })
+    );
+    return devicesArray;
   } catch (error) {
     console.error("Erro ao buscar todos os dispositivos:", error);
     throw error;
@@ -36,10 +38,13 @@ export const fetchTodos = async () => {
 export const fetchEsfera = async () => {
   try {
     const response = await axios.get(`${BASE_URL}${ENDPOINTS.ESFERA}`);
-    const devicesArray = Object.entries(response.data.data).map(([name, value]) => ({
-      name, 
-      value, 
-    }));
+    const devicesArray = Object.entries(response.data.data).map(
+      ([name, value]) => ({
+        name,
+        value,
+      })
+    );
+    console.log(devicesArray);
     return devicesArray;
   } catch (error) {
     console.error("Erro ao buscar dados da esfera:", error);
@@ -50,10 +55,12 @@ export const fetchEsfera = async () => {
 export const fetchGaveta = async () => {
   try {
     const response = await axios.get(`${BASE_URL}${ENDPOINTS.GAVETA}`);
-    const devicesArray = Object.entries(response.data.data).map(([name, value]) => ({
-      name, 
-      value, 
-    }));
+    const devicesArray = Object.entries(response.data.data).map(
+      ([name, value]) => ({
+        name,
+        value,
+      })
+    );
     return devicesArray;
   } catch (error) {
     console.error("Erro ao buscar dados da gaveta:", error);
@@ -64,11 +71,13 @@ export const fetchGaveta = async () => {
 export const fetchAr = async () => {
   try {
     const response = await axios.get(`${BASE_URL}${ENDPOINTS.AR}`);
-    const devicesArray = Object.entries(response.data.data).map(([name, value]) => ({
-        name, 
-        value, 
-      }));
-    return devicesArray; 
+    const devicesArray = Object.entries(response.data.data).map(
+      ([name, value]) => ({
+        name,
+        value,
+      })
+    );
+    return devicesArray;
   } catch (error) {
     console.error("Erro ao buscar dados do ar:", error);
     throw error;
