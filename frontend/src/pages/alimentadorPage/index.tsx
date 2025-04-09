@@ -4,11 +4,11 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Bar, Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
-import { ChevronDown } from "lucide-react";
+// Removed unused import
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import TabelaDeErros from "./TabelaDeErros";
-import alimentador from "../../assets/alimentador.png"
+import alimentador from "../../assets/alimentador.png";
 import ConfiguracoesAlimentador from "./ConfiguracoesAlimentador";
 
 
@@ -107,7 +107,7 @@ export default function Alimentador() {
       <div className="min-h-screen bg-gray-900 text-white p-4">
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Grafico de temperatura */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-10">
                       <Card>
                           <CardContent className="p-4 flex flex-col items-center">
                               <h2 className="font-bold text-lg mb-2 text-center">Temperatura</h2>
