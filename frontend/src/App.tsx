@@ -12,15 +12,9 @@ const router = createBrowserRouter([
     element: <Painel/>,
   },
   {
-<<<<<<< HEAD
     path: "/equipamento/alimentador",
     element: <Alimentador/>,
   },
-=======
-    path: "/:device",
-    element: <Alimentador />,
-  }
->>>>>>> 9e17e6772ba09b477bda390de1f122a5a8a2fd8f
 ]);
 
 function App() {
