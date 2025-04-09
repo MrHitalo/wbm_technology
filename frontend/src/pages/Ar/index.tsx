@@ -58,7 +58,10 @@ export default function Ar() {
           datasets: [
             {
               label: "Temperatura (°C)",
-              data: response[2].value as number[],
+              data: [
+                response.find((item) => item.name === "Temperatura:")?.value ||
+                  0,
+              ],
               backgroundColor: "rgba(75, 192, 192, 0.6)",
               borderColor: "rgba(75, 192, 192, 1)",
               borderWidth: 1,
