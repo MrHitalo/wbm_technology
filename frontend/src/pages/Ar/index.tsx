@@ -11,17 +11,6 @@ import { fetchAr } from "../../service/deviceService";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const dataDoughnut = {
-  labels: ["Ciclo 1", "Ciclo 2", "Ciclo 3"], // Rótulos das fatias
-  datasets: [
-    {
-      data: [10, 20, 30], // Valores correspondentes às fatias
-      backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"], // Cores das fatias
-      hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"], // Cores ao passar o mouse
-    },
-  ],
-};
-
 const erros = [
   { titulo: "Erro de conexão", detalhe: "Falha ao conectar ao servidor." },
   {
@@ -31,12 +20,28 @@ const erros = [
 ];
 
 export default function Ar() {
-  const [data, setData] = useState<{ name: string; value: number }[] | null>(
-    null
-  );
-  const [dataBar, setDataBar] = useState(null);
+  const [dataBar, setDataBar] = useState<{
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      backgroundColor: string;
+      borderColor: string;
+      borderWidth: number;
+    }[];
+  } | null>(null);
   const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState<unknown>(null);
+
+  const [dataDoughnut, setDataDoughnut] = useState<{
+    labels: string[];
+    datasets: {
+      data: number[];
+      backgroundColor: string[];
+      hoverBackgroundColor: string[];
+    }[];
+  } | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,20 +52,32 @@ export default function Ar() {
         if (!response) {
           throw new Error("Erro ao buscar os dados");
         }
-        setData(response);
+
         const barData = {
-          labels: response.map((item) => item.name), // Usa os nomes como rótulos
+          labels: ["Temperatura"],
           datasets: [
             {
               label: "Temperatura (°C)",
-              data: response.map((item) => item.value),
+              data: response[2].value as number[],
               backgroundColor: "rgba(75, 192, 192, 0.6)",
               borderColor: "rgba(75, 192, 192, 1)",
               borderWidth: 1,
             },
           ],
         };
+
+        const dataDoughnut = {
+          labels: ["Ciclo"],
+          datasets: [
+            {
+              data: response.map((item) => item.value as number),
+              backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+              hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+            },
+          ],
+        };
         setDataBar(barData);
+        setDataDoughnut(dataDoughnut);
       } catch (error) {
         console.error("Erro ao buscar os dados:", error);
         setError(error);
@@ -112,7 +129,7 @@ export default function Ar() {
                 <div className="flex items-center justify-center w-full">
                   <div className="w-full h-64">
                     {dataBar ? (
-                      <Bar data={dataBar} /> // Renderiza o gráfico com os dados processados
+                      <Bar data={dataBar} />
                     ) : (
                       <p>Carregando gráfico...</p>
                     )}
