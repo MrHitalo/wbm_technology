@@ -1,23 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
-import { Doughnut, Bar } from "react-chartjs-2"; // Importa o gráfico de barras
+import { Doughnut, Bar } from "react-chartjs-2";
+import ClipLoader from "react-spinners/ClipLoader";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import TabelaDeErros from "../alimentadorPage/TabelaDeErrosAlimentador";
-import ConfiguracoesAlimentador from "../alimentadorPage/ConfiguracoesAlimentador";
 import { fetchAr } from "../../service/deviceService";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-const erros = [
-  { titulo: "Erro de conexão", detalhe: "Falha ao conectar ao servidor." },
-  {
-    titulo: "Sensor inativo",
-    detalhe: "O sensor de temperatura não está respondendo.",
-  },
-];
 
 export default function Ar() {
   const [dataBar, setDataBar] = useState<{
@@ -43,16 +35,18 @@ export default function Ar() {
     }[];
   } | null>(null);
 
+  const erros = [
+    { titulo: "Erro de conexão", detalhe: "Falha ao conectar ao servidor." },
+    {
+      titulo: "Sensor inativo",
+      detalhe: "O sensor de temperatura não está respondendo.",
+    },
+  ];
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await fetchAr();
-        console.log(response);
-        if (!response) {
-          throw new Error("Erro ao buscar os dados");
-        }
-
         const barData = {
           labels: ["Temperatura"],
           datasets: [
@@ -73,16 +67,27 @@ export default function Ar() {
           labels: ["Ciclo"],
           datasets: [
             {
-              data: response.map((item) => item.value as number),
+              data: [
+                Number(
+                  response.find((item) => item.name === "Quantidade de Ciclos")
+                    ?.value || 0
+                ),
+              ],
               backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
               hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
             },
           ],
         };
-        setDataBar(barData);
+        setDataBar({
+          ...barData,
+          datasets: barData.datasets.map((dataset) => ({
+            ...dataset,
+            data: dataset.data.map((value) => Number(value)),
+          })),
+        });
         setDataDoughnut(dataDoughnut);
       } catch (error) {
-        console.error("Erro ao buscar os dados:", error);
+        console.error(error);
         setError(error);
       } finally {
         setLoading(false);
@@ -93,11 +98,56 @@ export default function Ar() {
   }, []);
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return (
+      <div
+        className="loading-container"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <ClipLoader color="#36a2eb" size={100} />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Erro: {error.toString()}</div>;
+    return (
+      <div
+        className="error-container"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          textAlign: "center",
+          color: "red",
+          fontSize: "1.5rem",
+        }}
+      >
+        <div>
+          <p>Erro de Carregamento de Dados</p>
+          <p>{error.toString()}</p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              marginTop: "20px",
+              padding: "10px 20px",
+              backgroundColor: "#36a2eb",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "1rem",
+            }}
+          >
+            Recarrgar a Pagina
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -150,14 +200,15 @@ export default function Ar() {
               </h2>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-50">
                 <div className="w-80 h-80">
-                  <Doughnut data={dataDoughnut} />
+                  {dataDoughnut ? (
+                    <Doughnut data={dataDoughnut} />
+                  ) : (
+                    <p>Carregando gráfico...</p>
+                  )}
                 </div>
               </div>
             </CardContent>
           </Card>
-
-          {/* Configurações da Válvula */}
-          <ConfiguracoesAlimentador />
 
           {/* Tabela de Erros */}
           <div className="mb-20">

@@ -1,7 +1,26 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "../../components/ui/card";
+import { fetchAr } from "../../service/deviceService";
 
-export default function ConfiguracoesAlimentador() {
+export default function ConfiguracoesAr() {
+  const [data, setData] = useState<{ name: string; value: unknown }[] | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchAr();
+        setData(response);
+      } catch (error) {
+        console.error("Erro ao buscar os dados:", error);
+      }
+    };
+    fetchData();
+  });
+
   return (
     <div className="max-w-2xl mx-auto space-y-4 mt-15">
       <Card>
@@ -10,7 +29,7 @@ export default function ConfiguracoesAlimentador() {
           <div className="pt-4 flex justify-center">
             <div className="text-sm text-center space-y-2 pb-4">
               <label className="block font-medium text-lg">
-                Id do alimentador
+                ID Válvula de Ar
               </label>
               <select className="text-black px-3 py-2 rounded border-2 border-gray-700">
                 <option value="1">1</option>
