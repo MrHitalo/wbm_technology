@@ -3,6 +3,8 @@ import Painel from "./pages/painelPage";
 import Alimentador from "./pages/alimentadorPage";
 import Ar from "./pages/Ar";
 import ValvulaGaveta from "./pages/valvulaGavetaPage";
+import ValvulaEsfera from "./pages/valvulaEsfera";
+import MonitorDeTemperatura from "./pages/monitorDeTemperatura";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
   {
     path: "/valvulaGaveta",
     element: <ValvulaGaveta />,
+  },
+  {
+    path: "/valvulaEsfera",
+    element: <ValvulaEsfera />,
+  },
+  {
+    path: "/monitorTemperatura",
+    element: <MonitorDeTemperatura />,
   },
 ]);
 

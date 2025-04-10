@@ -1,4 +1,7 @@
 import React from "react";
+import { useState } from "react";
+import { CampoConfiguracao } from "../../components/ModalConfigurar";
+
 // componentes
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
@@ -7,13 +10,14 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScal
 // Removed unused import
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import TabelaDeErrosAlimentador from "./TabelaDeErrosAlimentador";
 import alimentador from "../../assets/alimentador.png";
 import ConfiguracoesAlimentador from "./ConfiguracoesAlimentador";
 
 
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Context as ChartDataLabelsContext } from 'chartjs-plugin-datalabels';
+import TabelaDeErros from "../../components/TabelaDeErros";
+import ModalConfiguracao from "../../components/ModalConfigurar";
 
 
 
@@ -83,7 +87,20 @@ const erros = [
   { titulo: "Alimentador Quantidade Baixa", detalhe: "4 alimentadores" },
 ];
 
+const campos: CampoConfiguracao[] = [
+  { id: "valvula-id", label: "ID DO SENSOR", placeholder: "Ex: S001", tipo: "text" },
+  { id: "hora-liga", label: "INÍCIO DO CICLO", placeholder: "twatw",tipo: "time" },
+  { id: "hora-desliga", label: "FIM DO CICLO",placeholder: "twatw", tipo: "time" },
+  { id: "quantidade-ciclo", label: "DOSE POR CICLO (ml)", placeholder: "Ex: 301", tipo: "number" },
+  { id: "tempo-ciclo", label: "DURAÇÃO DO CICLO (s)", placeholder: "Ex: 5", tipo: "number" },
+];
+
+
+
+
 export default function Alimentador() {
+  const [modalAberto, setModalAberto] = useState(false);
+
   return (
     <>
       <Navbar />
@@ -99,7 +116,9 @@ export default function Alimentador() {
             <h3 className="font-semibold text-lg text-center leading-snug">
               Alimentador Control Feed
             </h3>
-            <Button className="w-full">Configurar</Button>
+            <Button className="w-full" type="submit" onClick={() => setModalAberto(true)}>
+              Configurar
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -143,8 +162,12 @@ export default function Alimentador() {
 
             {/* Nova Tabela de Erros*/}
             <div className="mb-20">
-            <TabelaDeErrosAlimentador tituloTabela="Erros do Alimentador" erros={erros} />
+            <TabelaDeErros tituloTabela="Erros do Alimentador" erros={erros} />
             </div>
+
+
+            
+            {modalAberto && <ModalConfiguracao closeModal={() => setModalAberto(false)} campos={campos} />}
 
         </div>
       </div>             

@@ -10,7 +10,7 @@ import valvulaGaveta from "../../assets/valvulaGaveta.png";
 // grandes componentes
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import TabelaDeErrosValvulaGaveta from "./TabelaDeErrosValvulaGaveta";
+import TabelaDeErros from "../../components/TabelaDeErros";
 import ConfiguracoesValvulaGaveta from "./ConfiguracoesValvulaGaveta";
 
 // imports de biblioteca
@@ -82,7 +82,7 @@ export default function ValvulaGaveta() {
 
                   {/* Nova Tabela de Erros*/}
                   <div className="mb-20">
-                  <TabelaDeErrosValvulaGaveta tituloTabela="Erros da Válvula" erros={erros} />
+                  <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
                   </div>
         </div>
       </div>             
