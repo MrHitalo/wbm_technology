@@ -42,6 +42,7 @@ export default function Ar() {
       detalhe: "O sensor de temperatura não está respondendo.",
     },
   ];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -78,6 +79,7 @@ export default function Ar() {
             },
           ],
         };
+
         setDataBar({
           ...barData,
           datasets: barData.datasets.map((dataset) => ({
@@ -93,7 +95,6 @@ export default function Ar() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
