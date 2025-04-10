@@ -12,7 +12,7 @@ type Props = {
   erros: Erro[];
 };
 
-export default function TabelaDeErros({ tituloTabela = "Tabela de Erros", erros }: Props) {
+export default function TabelaDeErrosAlimentador({ tituloTabela = "Tabela de Erros", erros }: Props) {
   return (
     <div className="flex justify-center mt-20">
       <div className="bg-white shadow-md rounded-xl p-6 w-full max-w-5xl">

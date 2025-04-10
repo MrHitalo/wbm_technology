@@ -7,7 +7,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScal
 // Removed unused import
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import TabelaDeErros from "./TabelaDeErros";
+import TabelaDeErrosAlimentador from "./TabelaDeErrosAlimentador";
 import alimentador from "../../assets/alimentador.png";
 import ConfiguracoesAlimentador from "./ConfiguracoesAlimentador";
 
@@ -143,7 +143,7 @@ export default function Alimentador() {
 
             {/* Nova Tabela de Erros*/}
             <div className="mb-20">
-            <TabelaDeErros tituloTabela="Erros do Alimentador" erros={erros} />
+            <TabelaDeErrosAlimentador tituloTabela="Erros do Alimentador" erros={erros} />
             </div>
 
         </div>
