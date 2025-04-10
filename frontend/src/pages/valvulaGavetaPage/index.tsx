@@ -5,28 +5,27 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Bar, Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
+import valvulaGaveta from "../../assets/valvulaGaveta.png";
 
 // grandes componentes
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import valvulaGaveta from "../../assets/valvulaGaveta.png";
-import ConfiguracoesValvula from "./ConfiguracoesValvula";
-
+import TabelaDeErrosValvulaGaveta from "./TabelaDeErrosValvulaGaveta";
+import ConfiguracoesValvulaGaveta from "./ConfiguracoesValvulaGaveta";
 
 // imports de biblioteca
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Context as ChartDataLabelsContext } from 'chartjs-plugin-datalabels';
-import TabelaDeErrosValvulaGaveta from "./TabelaDeErrosValvulaGaveta";
 
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ChartDataLabels);
 
 
 const erros = [
-    { titulo: "Tempo excedido", detalhe: "11 alimentadores" },
-    { titulo: "Motor Não Funcionando", detalhe: "9 alimentadores" },
-    { titulo: "Sensor de Temperatura com Defeito", detalhe: "8 alimentadores"},
-    { titulo: "Motor Travou", detalhe: "7 alimentadores" },
-    { titulo: "Válvula sem Comunicação", detalhe: "7 alimentadores" },
+    { titulo: "Tempo excedido", detalhe: "11 válvulas" },
+    { titulo: "Motor Não Funcionando", detalhe: "9 válvulas" },
+    { titulo: "Sensor de Temperatura com Defeito", detalhe: "8 válvulas"},
+    { titulo: "Motor Travou", detalhe: "7 válvulas" },
+    { titulo: "Válvula sem Comunicação", detalhe: "7 válvulas" },
   ];
 
 
@@ -79,11 +78,11 @@ export default function ValvulaGaveta() {
                   </div>
 
                   {/* Configurações Da Valvula*/}
-                  <ConfiguracoesValvula />
+                  <ConfiguracoesValvulaGaveta />
 
                   {/* Nova Tabela de Erros*/}
                   <div className="mb-20">
-                  <TabelaDeErrosValvulaGaveta tituloTabela="Erros do Alimentador" erros={erros} />
+                  <TabelaDeErrosValvulaGaveta tituloTabela="Erros da Válvula" erros={erros} />
                   </div>
         </div>
       </div>             

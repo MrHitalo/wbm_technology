@@ -5,7 +5,7 @@ import { Doughnut, Bar } from "react-chartjs-2"; // Importa o gráfico de barras
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import TabelaDeErros from "../alimentadorPage/TabelaDeErros";
+import TabelaDeErros from "../alimentadorPage/TabelaDeErrosAlimentador";
 import ConfiguracoesAlimentador from "../alimentadorPage/ConfiguracoesAlimentador";
 import { fetchAr } from "../../service/deviceService";
 

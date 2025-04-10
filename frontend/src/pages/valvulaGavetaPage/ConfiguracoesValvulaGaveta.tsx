@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "../../components/ui/card";
 
-export default function ConfiguracoesValvula() {
+export default function ConfiguracoesValvulaGaveta() {
   return (
     <div className="max-w-2xl mx-auto space-y-4 mt-15">
       <Card>
