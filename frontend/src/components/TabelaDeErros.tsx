@@ -15,7 +15,7 @@ type Props = {
 export default function TabelaDeErros({ tituloTabela = "Tabela de Erros", erros }: Props) {
   return (
     <div className="flex justify-center mt-20">
-      <div className="bg-white shadow-md rounded-xl p-6 w-full max-w-5xl">
+      <div className="bg-white shadow-md rounded-xl p-6 w-full max-w-5xl border-3 ">
         <h4 className="text-lg font-bold text-gray-800">{tituloTabela}</h4>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mt-4">

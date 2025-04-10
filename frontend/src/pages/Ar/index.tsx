@@ -6,12 +6,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-<<<<<<< HEAD
 import TabelaDeErros from "../../components/TabelaDeErros";
 import ConfiguracoesAlimentador from "../alimentadorPage/ConfiguracoesAlimentador";
-=======
-import TabelaDeErros from "../alimentadorPage/TabelaDeErrosAlimentador";
->>>>>>> e015a6c43572ca51be8a8457247d66db1d398883
 import { fetchAr } from "../../service/deviceService";
 import valvulaAr from "../../assets/valvulaAr.png";
 import ModalConfiguracao from "../../components/ModalConfigurar";
@@ -19,7 +15,6 @@ import { CampoConfiguracao } from "../../components/ModalConfigurar";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-<<<<<<< HEAD
 const erros = [
   { titulo: "Erro de conexão", detalhe: "Falha ao conectar ao servidor." },
   {
@@ -37,11 +32,9 @@ const campos: CampoConfiguracao[] = [
   { id: "tempo-ciclo", label: "DURAÇÃO DO CICLO (s)", placeholder: "Ex: 5", tipo: "number" },
 ];
 
-=======
->>>>>>> e015a6c43572ca51be8a8457247d66db1d398883
 export default function Ar() {
 
-    const [modalAberto, setModalAberto] = useState(false);
+  const [modalAberto, setModalAberto] = useState(false);
     
   const [dataBar, setDataBar] = useState<{
     labels: string[];
@@ -187,7 +180,7 @@ export default function Ar() {
       <Navbar />
       {/* Card equipamento */}
       <div className="absolute right-0 ">
-        <Card className="w-64 shadow-lg rounded-none border-b-emerald-400 border-l-emerald-400 border-3">
+        <Card className="w-64 shadow-lg rounded-none border-3 border-emerald-400 border-t-0 border-r-0">
           <CardContent className="p-3 pt-1 flex flex-col items-center space-y-3">
             { <img
               src={valvulaAr}
@@ -197,17 +190,19 @@ export default function Ar() {
             <h3 className="font-semibold text-lg text-center leading-snug">
               Válvula de Ar
             </h3>
-            <Button className="w-full">Configurar</Button>
+            <Button className="w-full" type="submit" onClick={() => setModalAberto(true)}>
+                          Configurar
+                        </Button>
           </CardContent>
         </Card>
       </div>
 
-      <div className="min-h-screen bg-gray-900 text-white p-4">
+      <div className="min-h-screen bg-primary text-white p-4">
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Gráfico de Temperatura */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
-            <Card>
-              <CardContent className="p-4 flex flex-col items-center">
+          <div className="flex justify-center mt-10">
+                      <Card>
+                        <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
                 <h2 className="font-bold text-lg mb-2 text-center">
                   Temperatura
                 </h2>

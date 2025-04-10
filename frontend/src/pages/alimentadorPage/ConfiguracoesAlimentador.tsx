@@ -3,7 +3,7 @@ import { Card, CardContent } from "../../components/ui/card";
 
 export default function ConfiguracoesAlimentador() {
   return (
-    <div className="max-w-2xl mx-auto space-y-4 mt-15">
+    <div className="max-w-2xl mx-auto space-y-4 mt-15 ">
       <Card>
         <CardContent className="p-3">
           <h2 className="font-bold text-center text-lg">CONFIGURAÇÕES</h2>
