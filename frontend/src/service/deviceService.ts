@@ -44,7 +44,6 @@ export const fetchEsfera = async () => {
         value,
       })
     );
-    console.log(devicesArray);
     return devicesArray;
   } catch (error) {
     console.error("Erro ao buscar dados da esfera:", error);
