@@ -6,12 +6,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-<<<<<<< HEAD
 import TabelaDeErros from "../../components/TabelaDeErros";
-import ConfiguracoesAlimentador from "../alimentadorPage/ConfiguracoesAlimentador";
-=======
-import TabelaDeErros from "../alimentadorPage/TabelaDeErrosAlimentador";
->>>>>>> e015a6c43572ca51be8a8457247d66db1d398883
 import { fetchAr } from "../../service/deviceService";
 import valvulaAr from "../../assets/valvulaAr.png";
 import ModalConfiguracao from "../../components/ModalConfigurar";
@@ -19,30 +14,42 @@ import { CampoConfiguracao } from "../../components/ModalConfigurar";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-<<<<<<< HEAD
-const erros = [
-  { titulo: "Erro de conexão", detalhe: "Falha ao conectar ao servidor." },
+const campos: CampoConfiguracao[] = [
   {
-    titulo: "Sensor inativo",
-    detalhe: "O sensor de temperatura não está respondendo.",
+    id: "valvula-id",
+    label: "ID DO SENSOR",
+    placeholder: "Ex: S001",
+    tipo: "text",
+  },
+  {
+    id: "hora-liga",
+    label: "INÍCIO DO CICLO",
+    placeholder: "twatw",
+    tipo: "time",
+  },
+  {
+    id: "hora-desliga",
+    label: "FIM DO CICLO",
+    placeholder: "twatw",
+    tipo: "time",
+  },
+  {
+    id: "quantidade-ciclo",
+    label: "DOSE POR CICLO (ml)",
+    placeholder: "Ex: 301",
+    tipo: "number",
+  },
+  {
+    id: "tempo-ciclo",
+    label: "DURAÇÃO DO CICLO (s)",
+    placeholder: "Ex: 5",
+    tipo: "number",
   },
 ];
 
-/// Campos de configuração do equipamento
-const campos: CampoConfiguracao[] = [
-  { id: "valvula-id", label: "ID DO SENSOR", placeholder: "Ex: S001", tipo: "text" },
-  { id: "hora-liga", label: "INÍCIO DO CICLO", placeholder: "twatw",tipo: "time" },
-  { id: "hora-desliga", label: "FIM DO CICLO",placeholder: "twatw", tipo: "time" },
-  { id: "quantidade-ciclo", label: "DOSE POR CICLO (ml)", placeholder: "Ex: 301", tipo: "number" },
-  { id: "tempo-ciclo", label: "DURAÇÃO DO CICLO (s)", placeholder: "Ex: 5", tipo: "number" },
-];
-
-=======
->>>>>>> e015a6c43572ca51be8a8457247d66db1d398883
 export default function Ar() {
+  const [modalAberto, setModalAberto] = useState(false);
 
-    const [modalAberto, setModalAberto] = useState(false);
-    
   const [dataBar, setDataBar] = useState<{
     labels: string[];
     datasets: {
@@ -189,11 +196,13 @@ export default function Ar() {
       <div className="absolute right-0 ">
         <Card className="w-64 shadow-lg rounded-none border-b-emerald-400 border-l-emerald-400 border-3">
           <CardContent className="p-3 pt-1 flex flex-col items-center space-y-3">
-            { <img
-              src={valvulaAr}
-              alt="Válvula de Ar"
-              className="w-full h-36 object-contain"
-            /> }
+            {
+              <img
+                src={valvulaAr}
+                alt="Válvula de Ar"
+                className="w-full h-36 object-contain"
+              />
+            }
             <h3 className="font-semibold text-lg text-center leading-snug">
               Válvula de Ar
             </h3>
@@ -250,9 +259,12 @@ export default function Ar() {
             />
           </div>
 
-          
-          {modalAberto && <ModalConfiguracao closeModal={() => setModalAberto(false)} campos={campos} />}
-
+          {modalAberto && (
+            <ModalConfiguracao
+              closeModal={() => setModalAberto(false)}
+              campos={campos}
+            />
+          )}
         </div>
       </div>
       <Footer />
