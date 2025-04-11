@@ -4,16 +4,6 @@ import React, { useState } from "react";
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Doughnut } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  ScriptableContext,
-} from "chart.js";
 import valvulaGaveta from "../../assets/valvulaGaveta.png";
 
 // grandes componentes
@@ -27,17 +17,9 @@ import { CampoConfiguracao } from "../../components/ModalConfigurar";
 // imports de biblioteca
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import annotationPlugin from "chartjs-plugin-annotation";
-
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  ChartDataLabels,
-  annotationPlugin
-);
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ScriptableContext, } from "chart.js";
+import GraficoPosicao from "./GraficoPosicao";
+ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ChartDataLabels, annotationPlugin);
 
 const COLORS: string[] = [
   "rgb(140, 214, 16)",
@@ -49,7 +31,7 @@ function index(perc: number): number {
   return perc < 70 ? 0 : perc < 90 ? 1 : 2;
 }
 
-const value = 50; // Temperatura atual
+const value = 30; // Temperatura atual
 
 const dataGauge = {
   labels: ["Usado"],
@@ -123,17 +105,12 @@ export default function ValvulaGaveta() {
 
       <div className="min-h-screen bg-primary text-white p-4">
         <div className="max-w-5xl mx-auto space-y-4">
-          {/* Gauge Chart de temperatura */}
+          {/* grafico de posição */}
           <div className="flex justify-center mt-10">
             <Card>
-              <CardContent className="pb-4 pt-2 px-10 flex flex-col items-center">
-                <h2 className="font-bold text-lg  text-center">Temperatura Atual</h2>
-                <div className="relative w-80 h-52 flex items-center justify-center">
-                <Doughnut data={dataGauge} options={optionsGauge} />
-                <div className="absolute inset-0 flex items-center justify-center translate-y-10">
-  <span className="font-bold text-4xl">{value + "°"}</span>
-</div> 
-  </div>       </CardContent>
+              <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
+                <GraficoPosicao />    
+              </CardContent>
             </Card>
           </div>
 

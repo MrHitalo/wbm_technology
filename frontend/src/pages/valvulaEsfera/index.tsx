@@ -4,7 +4,7 @@ import React from "react";
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Bar, Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ScriptableContext, } from "chart.js";
 import valvulaEsfera from "../../assets/valvulaEsfera.png";
 
 // grandes componentes
@@ -19,8 +19,51 @@ import { CampoConfiguracao } from "../../components/ModalConfigurar";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Context as ChartDataLabelsContext } from 'chartjs-plugin-datalabels';
 import { useState } from "react";
+import GraficoPosicao from "./GraficoPosicaoEsfera";
+import GraficoPosicaoEsfera from "./GraficoPosicaoEsfera";
 
-ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ChartDataLabels);
+ChartJS.register(ArcElement,Tooltip,Legend,BarElement,CategoryScale,LinearScale,ChartDataLabels);
+
+const COLORS: string[] = [
+  "rgb(140, 214, 16)",
+  "rgb(239, 198, 0)",
+  "rgb(231, 24, 49)",
+];
+
+function index(perc: number): number {
+  return perc < 70 ? 0 : perc < 90 ? 1 : 2;
+}
+
+const value = 90; // Temperatura atual
+
+const dataGauge = {
+  labels: ["Usado"],
+  datasets: [
+    {
+      data: [value, 100 - value],
+      backgroundColor: (ctx: ScriptableContext<"doughnut">) => {
+        if (ctx.dataIndex === 1) return "rgb(234, 234, 234)";
+        return COLORS[index(ctx.raw as number)];
+      },
+      borderWidth: 0,
+      cutout: "70%",
+    },
+  ],
+};
+
+
+const optionsGauge = {
+  aspectRatio: 2,
+  circumference: 180,
+  rotation: -90,
+  plugins: {
+    legend: { display: false },
+    tooltip: { enabled: false },
+    datalabels: {
+      display: false,
+    },
+  },
+};
 
 
 const erros = [
@@ -42,16 +85,6 @@ const erros = [
     { id: "setpoint-manual", label: "SETPOINT MANUAL", placeholder: "15", tipo: "number" },
     ];
 
-const dataPosicao = {
-    labels: ["Posicao"],
-    datasets: [
-      {
-        data: [30, 10],
-        backgroundColor: ["#00C49F", "#FF4444"],
-        borderWidth: 1,
-      },
-    ],
-  };
 
 
 
@@ -82,19 +115,14 @@ export default function ValvulaEsfera() {
 
       <div className="min-h-screen bg-primary text-white p-4">
         <div className="max-w-5xl mx-auto space-y-4">
-          {/* Grafico de temperatura */}
-                  <div className="flex justify-center mt-10">
-                              <Card>
-                                <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
-                              <h2 className="font-bold text-lg mb-2 text-center">Posição</h2>
-                              <div className="flex items-center justify-center w-full">
-                                  <div className="w-64 h-64">
-                                      <Doughnut data={dataPosicao} />
-                                  </div>
-                              </div>
-                          </CardContent>
+          {/* Gauge Chart de temperatura */}
+                    <div className="flex justify-center mt-10">
+                      <Card>
+                        <CardContent className="pb-4 pt-2 px-10 flex flex-col items-center">
+                            <GraficoPosicaoEsfera />     
+                        </CardContent>
                       </Card>
-                  </div>
+                    </div>
 
                   {/* Configurações Da Valvula*/}
                   <ConfiguracoesValvulaEsfera />
