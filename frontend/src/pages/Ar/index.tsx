@@ -11,7 +11,6 @@ import { fetchAr } from "../../service/deviceService";
 import valvulaAr from "../../assets/valvulaAr.png";
 import ModalConfiguracao from "../../components/ModalConfigurar";
 import { CampoConfiguracao } from "../../components/ModalConfigurar";
-
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const campos: CampoConfiguracao[] = [
@@ -62,7 +61,7 @@ export default function Ar() {
   } | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const [error, setError] = useState<unknown>(null);
+  // Removed unused error state
 
   const [dataDoughnut, setDataDoughnut] = useState<{
     labels: string[];
@@ -73,13 +72,16 @@ export default function Ar() {
     }[];
   } | null>(null);
 
-  const erros = [
-    { titulo: "Erro de conexão", detalhe: "Falha ao conectar ao servidor." },
+  const [erros, setErros] = useState([
     {
-      titulo: "Sensor inativo",
+      titulo: "Status de conexão",
+      detalhe: "Falha ao conectar ao servidor.",
+    },
+    {
+      titulo: "Status do Sensor",
       detalhe: "O sensor de temperatura não está respondendo.",
     },
-  ];
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,9 +128,33 @@ export default function Ar() {
           })),
         });
         setDataDoughnut(dataDoughnut);
+
+        // Atualiza o estado de erros com base no sucesso
+        setErros([
+          {
+            titulo: "Conexão",
+            detalhe: "A conexão com o servidor está funcionando corretamente.",
+          },
+          {
+            titulo: "Sensor",
+            detalhe: "Os dados do sensor foram carregados com sucesso.",
+          },
+        ]);
       } catch (error) {
-        console.error(error);
-        setError(error);
+        console.error("Erro ao buscar dados:", error);
+
+        setErros([
+          {
+            titulo: "Conexão",
+            detalhe:
+              "Erro de conexão: Não foi possível estabelecer conexão com o servidor.",
+          },
+          {
+            titulo: "Sensor",
+            detalhe:
+              "Erro no sensor: Não foi possível carregar os dados do sensor.",
+          },
+        ]);
       } finally {
         setLoading(false);
       }
@@ -148,43 +174,6 @@ export default function Ar() {
         }}
       >
         <ClipLoader color="#36a2eb" size={100} />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div
-        className="error-container"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          textAlign: "center",
-          color: "red",
-          fontSize: "1.5rem",
-        }}
-      >
-        <div>
-          <p>Erro de Carregamento de Dados</p>
-          <p>{error.toString()}</p>
-          <button
-            onClick={() => window.location.reload()}
-            style={{
-              marginTop: "20px",
-              padding: "10px 20px",
-              backgroundColor: "#36a2eb",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              fontSize: "1rem",
-            }}
-          >
-            Recarrgar a Pagina
-          </button>
-        </div>
       </div>
     );
   }
@@ -231,7 +220,7 @@ export default function Ar() {
                     {dataBar ? (
                       <Bar data={dataBar} />
                     ) : (
-                      <p>Carregando gráfico...</p>
+                      <p>Erro ao trazer Dados...</p>
                     )}
                   </div>
                 </div>
@@ -250,7 +239,7 @@ export default function Ar() {
                   {dataDoughnut ? (
                     <Doughnut data={dataDoughnut} />
                   ) : (
-                    <p>Carregando gráfico...</p>
+                    <p>Erro ao trazer dados...</p>
                   )}
                 </div>
               </div>

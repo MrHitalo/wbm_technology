@@ -8,6 +8,8 @@ export default {
   lerEsfera,
   lerGaveta,
   lerAr,
+  lerTemperatura,
+  lerUmidade,
 };
 
 const config = {
@@ -211,6 +213,38 @@ async function lerAr() {
     return dadosAr;
   } catch (err) {
     console.error("Erro ao ler ar:", err.message);
+    throw err;
+  }
+}
+
+async function lerTemperatura() {
+  try {
+    const response = await client.readHoldingRegisters(22, 26);
+    const dadosTemperatura = {};
+
+    mapa_leitura.temperatura.fields.forEach((campo, index) => {
+      dadosTemperatura[campo.trim()] = response.data[index];
+    });
+
+    return dadosTemperatura; // Retorna corretamente
+  } catch (err) {
+    console.error("Erro ao ler temperatura:", err.message);
+    throw err;
+  }
+}
+
+async function lerUmidade() {
+  try {
+    const response = await client.readHoldingRegisters(27, 29);
+    const dadosUmidade = {};
+
+    mapa_leitura.umidade.fields.forEach((campo, index) => {
+      dadosUmidade[campo.trim()] = response.data[index];
+    });
+
+    return dadosUmidade;
+  } catch (err) {
+    console.error("Erro ao ler Umidade", err.message);
     throw err;
   }
 }
