@@ -7,10 +7,6 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import TabelaDeErros from "../../components/TabelaDeErros";
-<<<<<<< HEAD
-=======
-import ConfiguracoesAlimentador from "../alimentadorPage/ConfiguracoesAlimentador";
->>>>>>> 2f56472c49a68ca540d7460934969eb064428a14
 import { fetchAr } from "../../service/deviceService";
 import valvulaAr from "../../assets/valvulaAr.png";
 import ModalConfiguracao from "../../components/ModalConfigurar";
@@ -18,12 +14,7 @@ import { CampoConfiguracao } from "../../components/ModalConfigurar";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-<<<<<<< HEAD
 const campos: CampoConfiguracao[] = [
-=======
-const erros = [
-  { titulo: "Erro de conexão", detalhe: "Falha ao conectar ao servidor." },
->>>>>>> 2f56472c49a68ca540d7460934969eb064428a14
   {
     id: "valvula-id",
     label: "ID DO SENSOR",
@@ -56,26 +47,9 @@ const erros = [
   },
 ];
 
-<<<<<<< HEAD
-=======
-/// Campos de configuração do equipamento
-const campos: CampoConfiguracao[] = [
-  { id: "valvula-id", label: "ID DO SENSOR", placeholder: "Ex: S001", tipo: "text" },
-  { id: "hora-liga", label: "INÍCIO DO CICLO", placeholder: "twatw",tipo: "time" },
-  { id: "hora-desliga", label: "FIM DO CICLO",placeholder: "twatw", tipo: "time" },
-  { id: "quantidade-ciclo", label: "DOSE POR CICLO (ml)", placeholder: "Ex: 301", tipo: "number" },
-  { id: "tempo-ciclo", label: "DURAÇÃO DO CICLO (s)", placeholder: "Ex: 5", tipo: "number" },
-];
-
->>>>>>> 2f56472c49a68ca540d7460934969eb064428a14
 export default function Ar() {
   const [modalAberto, setModalAberto] = useState(false);
 
-<<<<<<< HEAD
-=======
-  const [modalAberto, setModalAberto] = useState(false);
-    
->>>>>>> 2f56472c49a68ca540d7460934969eb064428a14
   const [dataBar, setDataBar] = useState<{
     labels: string[];
     datasets: {
@@ -232,9 +206,13 @@ export default function Ar() {
             <h3 className="font-semibold text-lg text-center leading-snug">
               Válvula de Ar
             </h3>
-            <Button className="w-full" type="submit" onClick={() => setModalAberto(true)}>
-                          Configurar
-                        </Button>
+            <Button
+              className="w-full"
+              type="submit"
+              onClick={() => setModalAberto(true)}
+            >
+              Configurar
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -243,8 +221,8 @@ export default function Ar() {
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Gráfico de Temperatura */}
           <div className="flex justify-center mt-10">
-                      <Card>
-                        <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
+            <Card>
+              <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
                 <h2 className="font-bold text-lg mb-2 text-center">
                   Temperatura
                 </h2>
