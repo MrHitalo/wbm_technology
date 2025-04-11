@@ -7,7 +7,7 @@ export default function BotaoFechar({ onClick }: { onClick: () => void }) {
       variant="ghost"
       size="icon"
       onClick={onClick}
-      className="absolute top-2 right-2 text-gray-500 hover:text-red-600 cursor-pointer"
+      className="absolute top-2 right-2 text-gray-500 hover:text-black cursor-pointer"
     >
       <X className="w-5 h-5" />
     </Button>

@@ -76,7 +76,7 @@ export default function MonitorDeTemperatura() {
       <Navbar />
       {/* Card equipamento */}
       <div className="absolute right-0 ">
-        <Card className="w-64 shadow-lg rounded-none border-b-emerald-400 border-l-emerald-400 border-3">
+        <Card className="w-64 shadow-lg rounded-none border-3 border-emerald-400 border-t-0 border-r-0">
           <CardContent className="p-3 pt-1 flex flex-col items-center space-y-3">
             <img
               src={monitorTemperatura}
@@ -91,12 +91,12 @@ export default function MonitorDeTemperatura() {
         </Card>
       </div>
 
-      <div className="min-h-screen bg-gray-900 text-white p-4">
+      <div className="min-h-screen bg-primary text-white p-4">
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Grafico de temperatura */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10 ">
-                      <Card>
-                          <CardContent className="p-4 flex flex-col items-center">
+                  <div className="flex justify-center mt-10">
+                              <Card>
+                                <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
                               <h2 className="font-bold text-lg mb-2 text-center">Temperatura 1</h2>
                               <div className="flex items-center justify-center w-full">
                                   <div className="w-64 h-64">

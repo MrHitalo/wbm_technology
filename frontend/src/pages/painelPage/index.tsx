@@ -16,7 +16,7 @@ export default function Painel() {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-gray-900 text-white p-6">
+      <div className="min-h-screen bg-primary text-white p-6 ">
         <h1 className="text-3xl font-bold mb-6">Painel de Dispositivos</h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
