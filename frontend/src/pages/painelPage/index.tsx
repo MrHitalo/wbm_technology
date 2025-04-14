@@ -4,6 +4,7 @@ import logoWBM from "../../assets/LOGO-OFC-WBM.png";
 import arImg from "../../assets/valvulaAr.png";
 import gavetaImg from "../../assets/valvulaGaveta.png";
 import esferaImg from "../../assets/valvulaEsfera.png";
+import Footer from "../../components/Footer";
 
 export default function Painel() {
   const devices = [
@@ -27,35 +28,36 @@ export default function Painel() {
       <Navbar />
 
       <div className="min-h-screen bg-primary text-white p-6 ">
-      <div className="max-w-6xl mx-auto space-y-4">
+      <div className="max-w-7xl mx-auto space-y-4">
         <h1 className="text-3xl font-bold mb-6 text-center">Painel de Dispositivos</h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
           {devices.map((device, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-2xl shadow-md p-4 text-center text-black flex flex-col justify-between h-80"
+              className="bg-white rounded-xl shadow-md p-4 text-center text-black flex flex-col justify-between h-90"
             >
               <Link
                 to={`/${device.name.toLowerCase()}`}
-                className="bg-gray-800 text-white py-2 px-4 rounded-lg mb-4 block text-center"
+                className="bg-gray-800 text-white font-medium py-2 px-4 rounded-lg mb-4 block text-center"
               >
                 Abrir Configuração
               </Link>
 
-              <div className="flex-1 flex items-center justify-center mb-4">
+              <div className="flex-1 flex items-center justify-center mb-4 font-medium text-2xl">
                 <img
                   src={device.img || logoWBM}
                   alt={device.name || "Dispositivo sem nome"}
-                  className="max-h-32 object-contain"
+                  className="max-h-45 object-contain"
                 />
               </div>
-              <p className="font-medium">{device.name}</p>
+              <p className="font-medium text-xl">{device.name}</p>
             </div>
           ))}
         </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

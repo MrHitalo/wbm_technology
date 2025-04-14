@@ -16,6 +16,7 @@ import { CampoConfiguracao } from "../../components/ModalConfigurar";
 import GraficoPosicao from "./GraficoPosicao";
 import ConfiguracoesValvulaGavetaManual from "./ConfiguracoesValvulaGavetaManual";
 import ModalSetpointManual from "../../components/ModalSetpointManual";
+import MySidebar from "../../components/MySidebar";
 
 
 const erros = [
@@ -42,7 +43,7 @@ export default function ValvulaGaveta() {
 
   return (
     <>
-      <Navbar />
+      <MySidebar />
       {/* Card equipamento */}
       <div className="absolute right-0 ">
         <Card className="w-64 shadow-lg rounded-none border-3 border-emerald-400 border-t-0 border-r-0">
@@ -74,6 +75,7 @@ export default function ValvulaGaveta() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-4">
+      <h1 className="text-3xl font-bold mb-6 text-center mt-5">Control Flow Gate</h1>
         <div className="max-w-5xl mx-auto space-y-4">
           {/* grafico de posição */}
           <div className="flex justify-center mt-10">

@@ -1,4 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { SidebarProvider } from "./components/ui/sidebar"; // ajuste o caminho se precisar
+
 import Painel from "./pages/painelPage";
 import Alimentador from "./pages/alimentadorPage";
 import Ar from "./pages/Ar";

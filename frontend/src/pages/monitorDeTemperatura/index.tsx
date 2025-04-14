@@ -3,30 +3,17 @@ import React from "react";
 // pequenos componentes
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
-import { Doughnut } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-} from "chart.js";
 import monitorTemperatura from "../../assets/monitorTemperatura.png";
 
 // grandes componentes
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-
-// imports de biblioteca
-import ChartDataLabels from "chartjs-plugin-datalabels";
-import { Context as ChartDataLabelsContext } from "chartjs-plugin-datalabels";
 import TabelaDeErros from "../../components/TabelaDeErros";
 import GraficoTemperatura1 from "./GraficoTemperatura1";
 import GraficoTemperatura2 from "./GraficoTemperatura2";
 import GraficoTemperatura3 from "./GraficoTemperatura3";
 import GraficoTemperatura4 from "./GraficoTemperatura4";
+import MySidebar from "../../components/MySidebar";
 
 const erros = [
   { titulo: "Sensor 1 desconectado", detalhe: "Sem erro aparente" },
@@ -39,7 +26,7 @@ const erros = [
 export default function MonitorDeTemperatura() {
   return (
     <>
-      <Navbar />
+      <MySidebar />
       {/* Card equipamento */}
       <div className="absolute right-0 ">
         <Card className="w-64 shadow-lg rounded-none border-3 border-emerald-400 border-t-0 border-r-0">
@@ -57,6 +44,7 @@ export default function MonitorDeTemperatura() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-4">
+      <h1 className="text-3xl font-bold mb-6 text-center mt-5">TempMonitor</h1>
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Grafico de temperatura 1 */}
           <div className="flex justify-center mt-10">
@@ -74,7 +62,7 @@ export default function MonitorDeTemperatura() {
                 <GraficoTemperatura2 />
                 <GraficoTemperatura3 />
               </div>
-              <GraficoTemperatura4 />
+                <GraficoTemperatura4 />
             </CardContent>
           </Card>
 
@@ -82,9 +70,6 @@ export default function MonitorDeTemperatura() {
             <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
           </div>
 
-          <div className="mb-20">
-            <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
-          </div>
         </div>
       </div>
       <Footer />

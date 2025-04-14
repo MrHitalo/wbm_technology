@@ -8,10 +8,10 @@ export default function ConfiguracoesValvulaEsfera() {
       <Card>
         <CardContent className="p-3">
           <div className="items-center mb-4">
-          <h2 className="font-bold text-center text-lg">CONFIGURAÇÕES</h2>
+          <h2 className="font-bold text-center text-lg mb-7">CONFIGURAÇÃO ATUAL</h2>
           
           </div>
-          <div className="pt-4 flex justify-center">
+          {/* <div className="pt-4 flex justify-center">
             <div className="text-sm text-center space-y-2 pb-4">
               <label className="block font-medium text-lg">Id da válvula</label>
               <select className="text-black px-3 py-2 rounded border-2 border-gray-700">
@@ -20,7 +20,7 @@ export default function ConfiguracoesValvulaEsfera() {
                 <option value="3">3</option>
               </select>
             </div>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-2 gap-4 text-lg space-y-3">
             <div className="space-y-1 text-center">

@@ -5,11 +5,9 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    // ...
-    "baseUrl": ".",
+    "baseUrl": ".", // baseUrl apontando para a raiz do projeto
     "paths": {
       "@/*": ["src/*"]
     }
-    // ...
   }
 }

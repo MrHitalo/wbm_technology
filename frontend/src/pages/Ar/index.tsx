@@ -3,16 +3,7 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Bar, Line } from "react-chartjs-2";
 import ClipLoader from "react-spinners/ClipLoader";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  LineElement,
-  PointElement,
-  CategoryScale,
-  LinearScale,
-} from "chart.js";
+
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import TabelaDeErros from "../../components/TabelaDeErros";
@@ -20,16 +11,9 @@ import valvulaAr from "../../assets/valvulaAr.png";
 import ModalConfiguracao from "../../components/ModalConfigurar";
 import { CampoConfiguracao } from "../../components/ModalConfigurar";
 import GraficoPosicaoAr from "./GraficoPosicaoAr";
+import MySidebar from "../../components/MySidebar";
+import GraficoLinhaTemperatura from "./GraficoTempEstatico";
 
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  LineElement,
-  PointElement,
-  CategoryScale,
-  LinearScale
-);
 
 const campos: CampoConfiguracao[] = [
   {
@@ -101,21 +85,7 @@ export default function Ar() {
 
   const [loading, setLoading] = useState(true);
 
-  const lineOptions = {
-    responsive: true,
-    scales: {
-      y: {
-        min: 10,
-        max: 40,
-        ticks: {
-          stepSize: 0.5,
-          callback: function (value: number) {
-            return value.toFixed(1);
-          },
-        },
-      },
-    },
-  };
+
 
   const barOptions = {
     responsive: true,
@@ -136,11 +106,11 @@ export default function Ar() {
   const [erros, setErros] = useState([
     {
       titulo: "Status de conexão",
-      detalhe: "Falha ao conectar ao servidor.",
+      detalhe: "Erro detectado",
     },
     {
       titulo: "Status do Sensor",
-      detalhe: "O sensor de temperatura não está respondendo.",
+      detalhe: "Nenhum erro aparente",
     },
   ]);
 
@@ -200,26 +170,13 @@ export default function Ar() {
         setErros([
           {
             titulo: "Conexão",
-            detalhe: "A conexão com o servidor está funcionando corretamente.",
-          },
-          {
-            titulo: "Sensor",
-            detalhe: "Os dados do sensor foram carregados com sucesso.",
-          },
-        ]);
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-
-        setErros([
-          {
-            titulo: "Conexão",
             detalhe:
-              "Erro de conexão: Não foi possível estabelecer conexão com o servidor.",
+              "Erro detectado",
           },
           {
             titulo: "Sensor",
             detalhe:
-              "Erro no sensor: Não foi possível carregar os dados do sensor.",
+              "Nenhum erro aparente",
           },
         ]);
       } finally {
@@ -248,7 +205,7 @@ export default function Ar() {
 
   return (
     <>
-      <Navbar />
+      <MySidebar />
       {/* Card equipamento */}
       <div className="absolute right-0 ">
         <Card className="w-64 shadow-lg rounded-none border-3 border-emerald-400 border-t-0 border-r-0">
@@ -273,6 +230,7 @@ export default function Ar() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-1">
+      <h1 className="text-3xl font-bold mb-6 text-center mt-5">Control Ar</h1>
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Gráfico de Temperatura */}
           <div className="flex justify-center mt-10">
@@ -309,26 +267,14 @@ export default function Ar() {
               <h2 className="font-bold text-xl mb-4 text-center">
                 Temperatura por Tempo (24h)
               </h2>
-              <div className="w-full" style={{ height: "600px" }}>
-                <div
-                  className="w-full"
-                  style={{
-                    height: "500px",
-                    width: "90vw",
-                    maxWidth: "1000px",
-                    margin: "0 auto",
-                  }}
-                >
-                  {dataLine ? (
-                    <Line data={dataLine} options={lineOptions} />
-                  ) : (
-                    <p>Erro ao trazer dados...</p>
-                  )}
-                </div>
-              </div>
+              {dataLine ? (
+                <GraficoLinhaTemperatura data={dataLine} />
+              ) : (
+                <p>Erro ao trazer dados...</p>
+              )}
             </CardContent>
           </Card>
-
+          
           {/* Tabela de Erros */}
           <div className="mb-20">
             <TabelaDeErros
