@@ -79,13 +79,13 @@ const dataQuantidade = {
 
 /// Campos de erro do equipamento
 const erros = [
-  { titulo: "Sem Conexão", detalhe: "11 alimentadores" },
-  { titulo: "Motor Não Funcionando", detalhe: "9 alimentadores" },
-  { titulo: "Sensor de Temperatura com Defeito", detalhe: "8 alimentadores"},
-  { titulo: "Motor Travou", detalhe: "7 alimentadores" },
-  { titulo: "Alimentador Trava", detalhe: "6 alimentadores" },
-  { titulo: "Alimentador Vazio", detalhe: "5 alimentadores" },
-  { titulo: "Alimentador Quantidade Baixa", detalhe: "4 alimentadores" },
+  { titulo: "Sem Conexão", detalhe: "Erro detectado" },
+  { titulo: "Motor Não Funcionando", detalhe: "Erro detectado" },
+  { titulo: "Sensor de Temperatura com Defeito", detalhe: "Sem erro aparente"},
+  { titulo: "Motor Travou", detalhe: "Erro detectado" },
+  { titulo: "Alimentador Trava", detalhe: "Sem erro aparente" },
+  { titulo: "Alimentador Vazio", detalhe: "Sem erro aparente" },
+  { titulo: "Alimentador Quantidade Baixa", detalhe: "Sem erro aparente" },
 ];
 
 /// Campos de configuração do equipamento

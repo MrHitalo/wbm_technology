@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // pequenos componentes
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
-import { Doughnut } from "react-chartjs-2";
+import { Switch } from "../../components/ui/switch";
 import valvulaGaveta from "../../assets/valvulaGaveta.png";
 
 // grandes componentes
@@ -13,62 +13,17 @@ import TabelaDeErros from "../../components/TabelaDeErros";
 import ConfiguracoesValvulaGaveta from "./ConfiguracoesValvulaGaveta";
 import ModalConfiguracao from "../../components/ModalConfigurar";
 import { CampoConfiguracao } from "../../components/ModalConfigurar";
-
-// imports de biblioteca
-import ChartDataLabels from "chartjs-plugin-datalabels";
-import annotationPlugin from "chartjs-plugin-annotation";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ScriptableContext, } from "chart.js";
 import GraficoPosicao from "./GraficoPosicao";
-ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ChartDataLabels, annotationPlugin);
-
-const COLORS: string[] = [
-  "rgb(140, 214, 16)",
-  "rgb(239, 198, 0)",
-  "rgb(231, 24, 49)",
-];
-
-function index(perc: number): number {
-  return perc < 70 ? 0 : perc < 90 ? 1 : 2;
-}
-
-const value = 30; // Temperatura atual
-
-const dataGauge = {
-  labels: ["Usado"],
-  datasets: [
-    {
-      data: [value, 100 - value],
-      backgroundColor: (ctx: ScriptableContext<"doughnut">) => {
-        if (ctx.dataIndex === 1) return "rgb(234, 234, 234)";
-        return COLORS[index(ctx.raw as number)];
-      },
-      borderWidth: 0,
-      cutout: "70%",
-    },
-  ],
-};
-
-
-const optionsGauge = {
-  aspectRatio: 2,
-  circumference: 180,
-  rotation: -90,
-  plugins: {
-    legend: { display: false },
-    tooltip: { enabled: false },
-    datalabels: {
-      display: false,
-    },
-  },
-};
+import ConfiguracoesValvulaGavetaManual from "./ConfiguracoesValvulaGavetaManual";
+import ModalSetpointManual from "../../components/ModalSetpointManual";
 
 
 const erros = [
-  { titulo: "Tempo excedido", detalhe: "11 válvulas" },
-  { titulo: "Motor Não Funcionando", detalhe: "9 válvulas" },
-  { titulo: "Sensor de Temperatura com Defeito", detalhe: "8 válvulas" },
-  { titulo: "Motor Travou", detalhe: "7 válvulas" },
-  { titulo: "Válvula sem Comunicação", detalhe: "7 válvulas" },
+  { titulo: "Tempo excedido", detalhe: "Sem erro aparente" },
+  { titulo: "Motor Não Funcionando", detalhe: "Erro detectado" },
+  { titulo: "Sensor de Temperatura com Defeito", detalhe: "Erro detectado" },
+  { titulo: "Motor Travou", detalhe: "Sem erro aparente" },
+  { titulo: "Válvula sem Comunicação", detalhe: "Sem erro aparente" },
 ];
 
 const campos: CampoConfiguracao[] = [
@@ -76,14 +31,14 @@ const campos: CampoConfiguracao[] = [
   { id: "hora-liga", label: "DEFINIR HORA A LIGAR", placeholder: "08:00", tipo: "time" },
   { id: "hora-desliga", label: "DEFINIR HORA A DESLIGAR", placeholder: "18:00", tipo: "time" },
   { id: "setpoint", label: "CONFIGURAR SETPOINT", placeholder: "8", tipo: "number" },
-  { id: "tempo-aberto", label: "TEMPO ABERTO(min)", placeholder: "500", tipo: "number" },
+  { id: "tempo-aberto", label: "TEMPO ABERTO(s)", placeholder: "500", tipo: "number" },
   { id: "tempo-ciclo", label: "DURAÇÃO DO CICLO (min)", placeholder: "15", tipo: "number" },
-  { id: "quantidade-ciclos", label: "QUANTIDADE DE CICLOS", placeholder: "15", tipo: "number" },
-  { id: "setpoint-manual", label: "SETPOINT MANUAL", placeholder: "15", tipo: "number" },
 ];
 
 export default function ValvulaGaveta() {
   const [modalAberto, setModalAberto] = useState(false);
+  const [modalSetpointManualAberto, setModalSetpointManualAberto] = useState(false);
+  const [setpointManualAtivo, setSetpointManualAtivo] = useState(false);
 
   return (
     <>
@@ -96,9 +51,24 @@ export default function ValvulaGaveta() {
             <h3 className="font-semibold text-lg text-center leading-snug">
               Control Flow Gate Valve
             </h3>
-            <Button className="w-full" type="submit" onClick={() => setModalAberto(true)}>
+            <Button
+              className="w-full"
+              type="submit"
+              onClick={() =>
+                setpointManualAtivo
+                  ? setModalSetpointManualAberto(true)
+                  : setModalAberto(true)
+              }
+            >
               Configurar
             </Button>
+            <div className="flex justify-center mt-4">
+              <Switch checked={setpointManualAtivo}
+                onCheckedChange={setSetpointManualAtivo}
+                className="mt-1 mr-4 scale-125">
+              </Switch>
+              <h1>{setpointManualAtivo ? "Setpoint Manual" : "Setpoint Automático"}</h1>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -109,20 +79,27 @@ export default function ValvulaGaveta() {
           <div className="flex justify-center mt-10">
             <Card>
               <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
-                <GraficoPosicao />    
+                <GraficoPosicao />
               </CardContent>
             </Card>
           </div>
 
-          {/* Configurações Da Valvula */}
-          <ConfiguracoesValvulaGaveta />
+          {/* Configurações da Válvula */}
+                    {setpointManualAtivo ? (
+                      <ConfiguracoesValvulaGavetaManual />
+                    ) : (
+                      <ConfiguracoesValvulaGaveta />
+                    )}
 
           {/* Nova Tabela de Erros */}
           <div className="mb-20">
             <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
           </div>
 
-          {modalAberto && <ModalConfiguracao closeModal={() => setModalAberto(false)} campos={campos} />}
+          {modalAberto && (<ModalConfiguracao closeModal={() => setModalAberto(false)} campos={campos}/>)}
+
+          {modalSetpointManualAberto && (<ModalSetpointManual closeModal={() => setModalSetpointManualAberto(false)}/>)}
+
         </div>
       </div>
       <Footer />

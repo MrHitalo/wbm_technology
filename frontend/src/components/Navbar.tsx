@@ -10,10 +10,6 @@ export default function Navbar() {
         <img src={logo} alt="Logo WBM" className="h-15 w-auto" />
       </div>
 
-      {/* Botão de ação */}
-      <button className="bg-gray-800 hover:bg-gray-900 text-white font-medium px-4 py-2 rounded-md transition duration-200">
-        Sair
-      </button>
     </header>
   );
 }

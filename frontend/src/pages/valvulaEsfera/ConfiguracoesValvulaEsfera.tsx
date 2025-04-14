@@ -1,12 +1,16 @@
 import React from "react";
 import { Card, CardContent } from "../../components/ui/card";
+import { Switch } from "../../components/ui/switch"
 
 export default function ConfiguracoesValvulaEsfera() {
   return (
     <div className="max-w-2xl mx-auto space-y-4 mt-15">
       <Card>
         <CardContent className="p-3">
+          <div className="items-center mb-4">
           <h2 className="font-bold text-center text-lg">CONFIGURAÇÕES</h2>
+          
+          </div>
           <div className="pt-4 flex justify-center">
             <div className="text-sm text-center space-y-2 pb-4">
               <label className="block font-medium text-lg">Id da válvula</label>
@@ -41,10 +45,6 @@ export default function ConfiguracoesValvulaEsfera() {
             </div>
             <div className="space-y-1 text-center">
               <label className="block font-medium">QUANTIDADE DE CICLOS</label>
-              <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">2</div>
-            </div>
-            <div className="space-y-1 text-center col-span-2 mx-auto">
-              <label className="block font-medium">SETPOINT MANUAL</label>
               <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">2</div>
             </div>
           </div>

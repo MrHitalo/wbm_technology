@@ -29,11 +29,11 @@ import GraficoTemperatura3 from "./GraficoTemperatura3";
 import GraficoTemperatura4 from "./GraficoTemperatura4";
 
 const erros = [
-  { titulo: "Sensor 1 desconectado", detalhe: "Nenhum erro" },
+  { titulo: "Sensor 1 desconectado", detalhe: "Sem erro aparente" },
   { titulo: "Sensor 2 desconectado", detalhe: "Erro detectado" },
   { titulo: "Sensor 3 desconectado", detalhe: "Erro detectado" },
-  { titulo: "Sensor 4 desconectado", detalhe: "Nenhum erro" },
-  { titulo: "Alimentador sem comunicação", detalhe: "Nenhum erro" },
+  { titulo: "Sensor 4 desconectado", detalhe: "Sem erro aparente" },
+  { titulo: "Alimentador sem comunicação", detalhe: "Sem erro aparente" },
 ];
 
 export default function MonitorDeTemperatura() {

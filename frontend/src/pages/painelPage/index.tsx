@@ -27,7 +27,8 @@ export default function Painel() {
       <Navbar />
 
       <div className="min-h-screen bg-primary text-white p-6 ">
-        <h1 className="text-3xl font-bold mb-6">Painel de Dispositivos</h1>
+      <div className="max-w-6xl mx-auto space-y-4">
+        <h1 className="text-3xl font-bold mb-6 text-center">Painel de Dispositivos</h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {devices.map((device, idx) => (
@@ -52,6 +53,7 @@ export default function Painel() {
               <p className="font-medium">{device.name}</p>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </>
