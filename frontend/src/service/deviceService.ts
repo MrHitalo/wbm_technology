@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = "http://localhost:3000";
+const WEBSOCKET_URL = "ws://localhost:3000";
 
 const ENDPOINTS = {
   TODOS: "/moduloMestre/todos",
@@ -9,6 +10,30 @@ const ENDPOINTS = {
   AR: "/moduloMestre/ar",
 };
 
+// Função genérica para buscar dados de qualquer endpoint
+const fetchData = async (endpoint: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}${endpoint}`);
+    const devicesArray = Object.entries(response.data.data).map(
+      ([name, value]) => ({
+        name,
+        value,
+      })
+    );
+    return devicesArray;
+  } catch (error) {
+    console.error(`Erro ao buscar dados do endpoint ${endpoint}:`, error);
+    throw error;
+  }
+};
+
+// Funções específicas para cada endpoint
+export const fetchTodos = async () => fetchData(ENDPOINTS.TODOS);
+export const fetchEsfera = async () => fetchData(ENDPOINTS.ESFERA);
+export const fetchGaveta = async () => fetchData(ENDPOINTS.GAVETA);
+export const fetchAr = async () => fetchData(ENDPOINTS.AR);
+
+// Função para verificar a conexão com o servidor
 export const serverConnection = async () => {
   try {
     const response = await axios.get(BASE_URL);
@@ -19,66 +44,32 @@ export const serverConnection = async () => {
   }
 };
 
-export const fetchTodos = async () => {
+// Função para conectar ao WebSocket
+export const connectWebSocket = (onMessage: (data: any) => void) => {
   try {
-    const response = await axios.get(`${BASE_URL}${ENDPOINTS.TODOS}`);
-    const devicesArray = Object.entries(response.data.data).map(
-      ([name, value]) => ({
-        name,
-        value,
-      })
-    );
-    return devicesArray;
-  } catch (error) {
-    console.error("Erro ao buscar todos os dispositivos:", error);
-    throw error;
-  }
-};
+    const ws = new WebSocket(WEBSOCKET_URL);
 
-export const fetchEsfera = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}${ENDPOINTS.ESFERA}`);
-    const devicesArray = Object.entries(response.data.data).map(
-      ([name, value]) => ({
-        name,
-        value,
-      })
-    );
-    return devicesArray;
-  } catch (error) {
-    console.error("Erro ao buscar dados da esfera:", error);
-    throw error;
-  }
-};
+    ws.onopen = () => {
+      console.log("Conexão WebSocket estabelecida.");
+    };
 
-export const fetchGaveta = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}${ENDPOINTS.GAVETA}`);
-    const devicesArray = Object.entries(response.data.data).map(
-      ([name, value]) => ({
-        name,
-        value,
-      })
-    );
-    return devicesArray;
-  } catch (error) {
-    console.error("Erro ao buscar dados da gaveta:", error);
-    throw error;
-  }
-};
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("Mensagem recebida do WebSocket:", data);
+      onMessage(data); // Chama a função de callback com os dados recebidos
+    };
 
-export const fetchAr = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}${ENDPOINTS.AR}`);
-    const devicesArray = Object.entries(response.data.data).map(
-      ([name, value]) => ({
-        name,
-        value,
-      })
-    );
-    return devicesArray;
+    ws.onerror = (error) => {
+      console.error("Erro no WebSocket:", error);
+    };
+
+    ws.onclose = () => {
+      console.log("Conexão WebSocket encerrada.");
+    };
+
+    return ws; // Retorna a instância do WebSocket para controle externo
   } catch (error) {
-    console.error("Erro ao buscar dados do ar:", error);
+    console.error("Erro ao conectar ao WebSocket:", error);
     throw error;
   }
 };
