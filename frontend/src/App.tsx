@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     element: <ValvulaGaveta />,
   },
   {
-    path: "/valvulaEsfera",
+    path: "/Esfera",
     element: <ValvulaEsfera />,
   },
   {
