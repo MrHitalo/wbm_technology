@@ -49,18 +49,18 @@ export default function DadosAr() {
         const response = (await fetchAr()) as {
           name: string;
           value: string | number;
-        }[]; // Chama a função fetchAr
+        }[];
         const validatedResponse = response.map((item: ArItem) => ({
           name: item.name,
           value: Number(item.value),
-        })); // Valida e converte o valor para número
-        setDados(validatedResponse); // Armazena os dados no estado
-        setError(null); // Limpa qualquer erro anterior
+        }));
+        setDados(validatedResponse);
+        setError(null);
       } catch (err) {
         console.error("Erro ao buscar dados do ar:", err);
         setError("Erro ao buscar dados do ar.");
       } finally {
-        setLoading(false); // Finaliza o carregamento
+        setLoading(false);
       }
     };
 

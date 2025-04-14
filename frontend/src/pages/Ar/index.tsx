@@ -105,10 +105,28 @@ export default function Ar() {
     responsive: true,
     scales: {
       y: {
+        min: 10,
+        max: 40,
         ticks: {
-          stepSize: 1, // Define o intervalo entre os valores no eixo Y
+          stepSize: 0.5,
           callback: function (value: number) {
-            return Number.isInteger(value) ? value : null; // Exibe apenas valores inteiros
+            return value.toFixed(1);
+          },
+        },
+      },
+    },
+  };
+
+  const barOptions = {
+    responsive: true,
+    scales: {
+      y: {
+        min: 10,
+        max: 40,
+        ticks: {
+          stepSize: 0.5,
+          callback: function (value: number) {
+            return value.toFixed(1);
           },
         },
       },
@@ -130,18 +148,12 @@ export default function Ar() {
     const fetchData = async () => {
       try {
         setLoading(true);
-
-        // Simulação de dados para o gráfico de temperatura por tempo
         const simulatedResponse = Array.from({ length: 24 }, (_, i) => {
-          // Temperatura base para o tanque de peixes
-          const baseTemperature = 25; // Temperatura média em °C
-
-          // Oscilação de temperatura em torno da base (±1.5°C)
-          const variation = Math.random() * 3 - 1.5; // Gera valores entre -1.5 e +1.5
-
+          const baseTemperature = 25;
+          const variation = Math.random() * 3 - 1.5;
           return {
             name: `Temperatura ${i}:00`,
-            value: parseInt((baseTemperature + variation).toFixed(1)), // Temperatura com 1 casa decimal
+            value: parseInt((baseTemperature + variation).toFixed(1)),
           };
         });
 
@@ -174,20 +186,6 @@ export default function Ar() {
               fill: true,
             },
           ],
-        };
-
-        const lineOptions = {
-          responsive: true,
-          scales: {
-            y: {
-              ticks: {
-                stepSize: 1, // Define o intervalo entre os valores no eixo Y
-                callback: function (value: number) {
-                  return Number.isInteger(value) ? value : null; // Exibe apenas valores inteiros
-                },
-              },
-            },
-          },
         };
 
         setDataBar({
@@ -274,17 +272,17 @@ export default function Ar() {
         </Card>
       </div>
 
-      <div className="min-h-screen bg-primary text-white p-4">
+      <div className="min-h-screen bg-primary text-white p-1">
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Gráfico de Temperatura */}
           <div className="flex justify-center mt-10">
             <Card>
-              <CardContent className="pb-1 pt-2 pl-25 pr-25 flex flex-col items-center">
+              <CardContent className="pb-0 pt-2 pl-25 pr-20 flex flex-col items-center">
                 <h2 className="font-bold text-lg mb-2 text-center">
                   Temperatura
                 </h2>
                 <div className="flex items-center justify-center w-full">
-                  <div className="w-70 h-70">
+                  <div className="w-70 h-30">
                     {dataBar ? (
                       <Bar data={dataBar} />
                     ) : (
@@ -297,7 +295,7 @@ export default function Ar() {
           </div>
 
           {/* Gráficos de Posição */}
-          <div className="flex justify-center mt-10">
+          <div className="flex justify-center mt-10 mb-10">
             <Card>
               <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
                 <GraficoPosicaoAr />
@@ -307,14 +305,19 @@ export default function Ar() {
 
           {/* Gráfico de Temperatura por Tempo */}
           <Card>
-            <CardContent className="p-1 flex flex-col items-center">
-              <h2 className="font-bold text-lg mb-1 text-center">
+            <CardContent className="p-4 flex flex-col items-center">
+              <h2 className="font-bold text-xl mb-4 text-center">
                 Temperatura por Tempo (24h)
               </h2>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-0">
+              <div className="w-full" style={{ height: "600px" }}>
                 <div
-                  className="w-full h-64" // Ajusta a largura e altura do gráfico
-                  style={{ maxWidth: "800px", margin: "0 auto" }} // Centraliza e estica o gráfico
+                  className="w-full"
+                  style={{
+                    height: "500px",
+                    width: "90vw",
+                    maxWidth: "1000px",
+                    margin: "0 auto",
+                  }}
                 >
                   {dataLine ? (
                     <Line data={dataLine} options={lineOptions} />
