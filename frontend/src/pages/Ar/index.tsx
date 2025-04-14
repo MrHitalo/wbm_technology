@@ -277,11 +277,11 @@ export default function Ar() {
           {/* Gráfico de Temperatura */}
           <div className="flex justify-center mt-10">
             <Card>
-              <CardContent className="pb-0 pt-2 pl-25 pr-20 flex flex-col items-center">
+              <CardContent className="pb-0 pt-2 pl-33  pr-27 flex flex-col items-center">
                 <h2 className="font-bold text-lg mb-2 text-center">
                   Temperatura
                 </h2>
-                <div className="flex items-center justify-center w-full">
+                <div className="flex items-center justify-center w-full mb-15 mr-1.5">
                   <div className="w-70 h-30">
                     {dataBar ? (
                       <Bar data={dataBar} />
