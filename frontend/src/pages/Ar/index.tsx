@@ -1,17 +1,35 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
-import { Doughnut, Bar } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import ClipLoader from "react-spinners/ClipLoader";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import TabelaDeErros from "../../components/TabelaDeErros";
-import { fetchAr } from "../../service/deviceService";
 import valvulaAr from "../../assets/valvulaAr.png";
 import ModalConfiguracao from "../../components/ModalConfigurar";
 import { CampoConfiguracao } from "../../components/ModalConfigurar";
-ChartJS.register(ArcElement, Tooltip, Legend);
+import GraficoPosicaoAr from "./GraficoPosicaoAr";
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale
+);
 
 const campos: CampoConfiguracao[] = [
   {
@@ -59,9 +77,18 @@ export default function Ar() {
       borderWidth: number;
     }[];
   } | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  // Removed unused error state
+  const [dataLine, setDataLine] = useState<{
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      backgroundColor: string;
+      borderColor: string;
+      tension: number;
+      fill: boolean;
+    }[];
+  } | null>(null);
 
   const [dataDoughnut, setDataDoughnut] = useState<{
     labels: string[];
@@ -71,6 +98,22 @@ export default function Ar() {
       hoverBackgroundColor: string[];
     }[];
   } | null>(null);
+
+  const [loading, setLoading] = useState(true);
+
+  const lineOptions = {
+    responsive: true,
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 1, // Define o intervalo entre os valores no eixo Y
+          callback: function (value: number) {
+            return Number.isInteger(value) ? value : null; // Exibe apenas valores inteiros
+          },
+        },
+      },
+    },
+  };
 
   const [erros, setErros] = useState([
     {
@@ -87,15 +130,30 @@ export default function Ar() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetchAr();
+
+        // Simulação de dados para o gráfico de temperatura por tempo
+        const simulatedResponse = Array.from({ length: 24 }, (_, i) => {
+          // Temperatura base para o tanque de peixes
+          const baseTemperature = 25; // Temperatura média em °C
+
+          // Oscilação de temperatura em torno da base (±1.5°C)
+          const variation = Math.random() * 3 - 1.5; // Gera valores entre -1.5 e +1.5
+
+          return {
+            name: `Temperatura ${i}:00`,
+            value: parseInt((baseTemperature + variation).toFixed(1)), // Temperatura com 1 casa decimal
+          };
+        });
+
         const barData = {
           labels: ["Temperatura"],
           datasets: [
             {
               label: "Temperatura (°C)",
               data: [
-                response.find((item) => item.name === "Temperatura:")?.value ||
-                  0,
+                simulatedResponse.find(
+                  (item) => item.name === "Temperatura 0:00"
+                )?.value || 0,
               ],
               backgroundColor: "rgba(75, 192, 192, 0.6)",
               borderColor: "rgba(75, 192, 192, 1)",
@@ -104,20 +162,32 @@ export default function Ar() {
           ],
         };
 
-        const dataDoughnut = {
-          labels: ["Ciclo"],
+        const lineData = {
+          labels: Array.from({ length: 24 }, (_, i) => `${i}:00`), // Horas de 0h a 23h
           datasets: [
             {
-              data: [
-                Number(
-                  response.find((item) => item.name === "Quantidade de Ciclos")
-                    ?.value || 0
-                ),
-              ],
-              backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-              hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+              label: "Temperatura por Tempo (°C)",
+              data: simulatedResponse.map((item) => item.value), // Usa os valores simulados
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              tension: 0.4,
+              fill: true,
             },
           ],
+        };
+
+        const lineOptions = {
+          responsive: true,
+          scales: {
+            y: {
+              ticks: {
+                stepSize: 1, // Define o intervalo entre os valores no eixo Y
+                callback: function (value: number) {
+                  return Number.isInteger(value) ? value : null; // Exibe apenas valores inteiros
+                },
+              },
+            },
+          },
         };
 
         setDataBar({
@@ -127,9 +197,8 @@ export default function Ar() {
             data: dataset.data.map((value) => Number(value)),
           })),
         });
-        setDataDoughnut(dataDoughnut);
+        setDataLine(lineData);
 
-        // Atualiza o estado de erros com base no sucesso
         setErros([
           {
             titulo: "Conexão",
@@ -159,6 +228,7 @@ export default function Ar() {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
@@ -185,13 +255,11 @@ export default function Ar() {
       <div className="absolute right-0 ">
         <Card className="w-64 shadow-lg rounded-none border-3 border-emerald-400 border-t-0 border-r-0">
           <CardContent className="p-3 pt-1 flex flex-col items-center space-y-3">
-            {
-              <img
-                src={valvulaAr}
-                alt="Válvula de Ar"
-                className="w-full h-36 object-contain"
-              />
-            }
+            <img
+              src={valvulaAr}
+              alt="Válvula de Ar"
+              className="w-full h-36 object-contain"
+            />
             <h3 className="font-semibold text-lg text-center leading-snug">
               Válvula de Ar
             </h3>
@@ -211,12 +279,12 @@ export default function Ar() {
           {/* Gráfico de Temperatura */}
           <div className="flex justify-center mt-10">
             <Card>
-              <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
+              <CardContent className="pb-1 pt-2 pl-25 pr-25 flex flex-col items-center">
                 <h2 className="font-bold text-lg mb-2 text-center">
                   Temperatura
                 </h2>
                 <div className="flex items-center justify-center w-full">
-                  <div className="w-full h-64">
+                  <div className="w-70 h-70">
                     {dataBar ? (
                       <Bar data={dataBar} />
                     ) : (
@@ -228,16 +296,28 @@ export default function Ar() {
             </Card>
           </div>
 
-          {/* Gráficos de Quantidade */}
-          <Card className="mt-10">
-            <CardContent className="p-4 flex flex-col items-center">
-              <h2 className="font-bold text-lg mb-6 text-center">
-                Quantidade De Ciclos
+          {/* Gráficos de Posição */}
+          <div className="flex justify-center mt-10">
+            <Card>
+              <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
+                <GraficoPosicaoAr />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Gráfico de Temperatura por Tempo */}
+          <Card>
+            <CardContent className="p-1 flex flex-col items-center">
+              <h2 className="font-bold text-lg mb-1 text-center">
+                Temperatura por Tempo (24h)
               </h2>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-50">
-                <div className="w-80 h-80">
-                  {dataDoughnut ? (
-                    <Doughnut data={dataDoughnut} />
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-0">
+                <div
+                  className="w-full h-64" // Ajusta a largura e altura do gráfico
+                  style={{ maxWidth: "800px", margin: "0 auto" }} // Centraliza e estica o gráfico
+                >
+                  {dataLine ? (
+                    <Line data={dataLine} options={lineOptions} />
                   ) : (
                     <p>Erro ao trazer dados...</p>
                   )}
