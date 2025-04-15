@@ -1,21 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardContent } from "../../components/ui/card";
-import { fetchAr } from "../../service/deviceService";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  ScriptableContext,
-} from "chart.js";
+import { useEffect, useState } from "react";
+import { connectWebSocketAr } from "../../service/deviceService";
 import { Doughnut } from "react-chartjs-2";
-
-function index(perc: number): number {
-  return perc < 24 ? 0 : perc < 30 ? 1 : 2;
-}
 
 const optionsGauge = {
   aspectRatio: 2,
@@ -30,42 +15,55 @@ const optionsGauge = {
   },
 };
 
-export default function DadosAr() {
-  const [dados, setDados] = useState<{ name: string; value: number }[] | null>(
-    null
-  );
+export default function PosicaoAr() {
+  const [dataDoughnut, setDataDoughnut] = useState({
+    labels: ["Posição Atual", "Restante"],
+    datasets: [
+      {
+        data: [0, 100],
+        backgroundColor: ["#00C49F", "#EAEAEA"],
+        hoverBackgroundColor: ["#00C49F", "#EAEAEA"],
+      },
+    ],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    interface ArItem {
-      name: string;
-      value: string | number;
-    }
+    setLoading(true);
 
-    const fetchData = async () => {
+    const ws = connectWebSocketAr((data) => {
       try {
-        setLoading(true);
-        const response = (await fetchAr()) as {
-          name: string;
-          value: string | number;
-        }[];
-        const validatedResponse = response.map((item: ArItem) => ({
-          name: item.name,
-          value: Number(item.value),
-        }));
-        setDados(validatedResponse);
+        console.log("Dados recebidos do WebSocket:", data);
+
+        // Atualiza o gráfico de posição
+        const posicao = data.ar?.Posicao || 0; // Certifique-se de que `Posicao` existe nos dados
+        const doughnutData = {
+          labels: ["Posição Atual", "Restante"],
+          datasets: [
+            {
+              data: [posicao, 100 - posicao],
+              backgroundColor: ["#00C49F", "#EAEAEA"],
+              hoverBackgroundColor: ["#00C49F", "#EAEAEA"],
+            },
+          ],
+        };
+
+        setDataDoughnut(doughnutData);
         setError(null);
       } catch (err) {
-        console.error("Erro ao buscar dados do ar:", err);
-        setError("Erro ao buscar dados do ar.");
+        console.error("Erro ao processar dados do WebSocket:", err);
+        setError("Erro ao processar dados do WebSocket.");
       } finally {
         setLoading(false);
       }
-    };
+    });
 
-    fetchData();
-  }, []); // Executa apenas uma vez ao montar o componente
+    return () => {
+      ws.close();
+      console.log("Conexão WebSocket encerrada.");
+    };
+  }, []);
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -75,28 +73,14 @@ export default function DadosAr() {
     return <p>{error}</p>;
   }
 
-  const value = Number(
-    dados?.find((item) => item.name === "Posicao:")?.value || 0
-  );
-
-  const dataGauge = {
-    labels: ["Posição atual"],
-    datasets: [
-      {
-        data: [value, 100 - value],
-        backgroundColor: ["#00C49F", "#EAEAEA"],
-        borderWidth: 1,
-        cutout: "70%",
-      },
-    ],
-  };
-
   return (
     <div className="GraficoPosicao">
       <h2 className="font-bold text-lg mb-2 text-center">Posição Da Válvula</h2>
       <div className="w-80 h-52 flex flex-col items-center justify-center">
-        <Doughnut className="mt-1" data={dataGauge} options={optionsGauge} />
-        <span className="font-bold text-4xl -mt-10">{value + "%"}</span>
+        <Doughnut className="mt-1" data={dataDoughnut} options={optionsGauge} />
+        <span className="font-bold text-4xl -mt-10">
+          {dataDoughnut.datasets[0].data[0]}%
+        </span>
       </div>
     </div>
   );

@@ -15,47 +15,101 @@ const server = app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });
 
-// Configuração do WebSocket
-const wss = new WebSocketServer({ server }); // Usa o mesmo servidor HTTP do Express
+// Configuração de múltiplos WebSockets
+const wssAr = new WebSocketServer({ noServer: true });
+const wssEsfera = new WebSocketServer({ noServer: true });
+const wssGaveta = new WebSocketServer({ noServer: true });
 
-wss.on("connection", (ws) => {
-  console.log("Cliente conectado via WebSocket");
+// WebSocket para "ar"
+wssAr.on("connection", (ws) => {
+  console.log("Cliente conectado ao WebSocket de 'ar'");
 
-  // Envia dados reais do Modbus periodicamente
   const interval = setInterval(async () => {
     try {
-      // Lê os dados de todas as funções do ModbusController
       const dadosAr = await registradorIO.lerAr();
-      const dadosEsfera = await registradorIO.lerEsfera();
-      const dadosGaveta = await registradorIO.lerGaveta();
-      const dadosTemperatura = await registradorIO.lerTemperatura();
-      const dadosUmidade = await registradorIO.lerUmidade();
-
-      // Monta o objeto com todos os dados
-      const data = {
-        time: new Date().toLocaleTimeString(),
-        ar: dadosAr,
-        esfera: dadosEsfera,
-        gaveta: dadosGaveta,
-        temperatura: dadosTemperatura,
-        umidade: dadosUmidade,
-      };
-
-      // Envia os dados para o cliente conectado
-      ws.send(JSON.stringify(data));
-    } catch (err) {
-      console.error("Erro ao ler dados do Modbus:", err.message);
       ws.send(
-        JSON.stringify({
-          error: "Erro ao obter dados do Modbus",
-        })
+        JSON.stringify({ time: new Date().toLocaleTimeString(), ar: dadosAr })
       );
+    } catch (err) {
+      console.error("Erro ao ler dados de 'ar':", err.message);
+      ws.send(JSON.stringify({ error: "Erro ao obter dados de 'ar'" }));
     }
-  }, 1000); // Atualiza a cada 1 segundo
+  }, 1000);
 
-  // Limpa o intervalo quando o cliente desconecta
   ws.on("close", () => {
-    console.log("Cliente desconectado");
+    console.log("Cliente desconectado do WebSocket de 'ar'");
     clearInterval(interval);
   });
+});
+
+// WebSocket para "esfera"
+wssEsfera.on("connection", (ws) => {
+  console.log("Cliente conectado ao WebSocket de 'esfera'");
+
+  const interval = setInterval(async () => {
+    try {
+      const dadosEsfera = await registradorIO.lerEsfera();
+      ws.send(
+        JSON.stringify({
+          time: new Date().toLocaleTimeString(),
+          esfera: dadosEsfera,
+        })
+      );
+    } catch (err) {
+      console.error("Erro ao ler dados de 'esfera':", err.message);
+      ws.send(JSON.stringify({ error: "Erro ao obter dados de 'esfera'" }));
+    }
+  }, 1000);
+
+  ws.on("close", () => {
+    console.log("Cliente desconectado do WebSocket de 'esfera'");
+    clearInterval(interval);
+  });
+});
+
+// WebSocket para "gaveta"
+wssGaveta.on("connection", (ws) => {
+  console.log("Cliente conectado ao WebSocket de 'gaveta'");
+
+  const interval = setInterval(async () => {
+    try {
+      const dadosGaveta = await registradorIO.lerGaveta();
+      ws.send(
+        JSON.stringify({
+          time: new Date().toLocaleTimeString(),
+          gaveta: dadosGaveta,
+        })
+      );
+    } catch (err) {
+      console.error("Erro ao ler dados de 'gaveta':", err.message);
+      ws.send(JSON.stringify({ error: "Erro ao obter dados de 'gaveta'" }));
+    }
+  }, 1000);
+
+  ws.on("close", () => {
+    console.log("Cliente desconectado do WebSocket de 'gaveta'");
+    clearInterval(interval);
+  });
+});
+
+// Gerencia conexões para múltiplos WebSockets
+server.on("upgrade", (request, socket, head) => {
+  const pathname = new URL(request.url, `http://${request.headers.host}`)
+    .pathname;
+
+  if (pathname === "/ws/ar") {
+    wssAr.handleUpgrade(request, socket, head, (ws) => {
+      wssAr.emit("connection", ws, request);
+    });
+  } else if (pathname === "/ws/esfera") {
+    wssEsfera.handleUpgrade(request, socket, head, (ws) => {
+      wssEsfera.emit("connection", ws, request);
+    });
+  } else if (pathname === "/ws/gaveta") {
+    wssGaveta.handleUpgrade(request, socket, head, (ws) => {
+      wssGaveta.emit("connection", ws, request);
+    });
+  } else {
+    socket.destroy();
+  }
 });

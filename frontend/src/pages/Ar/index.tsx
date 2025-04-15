@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import ClipLoader from "react-spinners/ClipLoader";
 
-import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import TabelaDeErros from "../../components/TabelaDeErros";
 import valvulaAr from "../../assets/valvulaAr.png";
 import ModalConfiguracao from "../../components/ModalConfigurar";
 import { CampoConfiguracao } from "../../components/ModalConfigurar";
-import GraficoPosicaoAr from "./GraficoPosicaoAr";
 import MySidebar from "../../components/MySidebar";
 import GraficoLinhaTemperatura from "./GraficoTempEstatico";
-
+import { connectWebSocketAr } from "../../service/deviceService";
 
 const campos: CampoConfiguracao[] = [
   {
@@ -62,18 +60,6 @@ export default function Ar() {
     }[];
   } | null>(null);
 
-  const [dataLine, setDataLine] = useState<{
-    labels: string[];
-    datasets: {
-      label: string;
-      data: number[];
-      backgroundColor: string;
-      borderColor: string;
-      tension: number;
-      fill: boolean;
-    }[];
-  } | null>(null);
-
   const [dataDoughnut, setDataDoughnut] = useState<{
     labels: string[];
     datasets: {
@@ -84,24 +70,6 @@ export default function Ar() {
   } | null>(null);
 
   const [loading, setLoading] = useState(true);
-
-
-
-  const barOptions = {
-    responsive: true,
-    scales: {
-      y: {
-        min: 10,
-        max: 40,
-        ticks: {
-          stepSize: 0.5,
-          callback: function (value: number) {
-            return value.toFixed(1);
-          },
-        },
-      },
-    },
-  };
 
   const [erros, setErros] = useState([
     {
@@ -115,76 +83,43 @@ export default function Ar() {
   ]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const simulatedResponse = Array.from({ length: 24 }, (_, i) => {
-          const baseTemperature = 25;
-          const variation = Math.random() * 3 - 1.5;
-          return {
-            name: `Temperatura ${i}:00`,
-            value: parseInt((baseTemperature + variation).toFixed(1)),
-          };
-        });
+    setLoading(true);
 
-        const barData = {
-          labels: ["Temperatura"],
-          datasets: [
-            {
-              label: "Temperatura (°C)",
-              data: [
-                simulatedResponse.find(
-                  (item) => item.name === "Temperatura 0:00"
-                )?.value || 0,
-              ],
-              backgroundColor: "rgba(75, 192, 192, 0.6)",
-              borderColor: "rgba(75, 192, 192, 1)",
-              borderWidth: 1,
-            },
-          ],
-        };
-
-        const lineData = {
-          labels: Array.from({ length: 24 }, (_, i) => `${i}:00`), // Horas de 0h a 23h
-          datasets: [
-            {
-              label: "Temperatura por Tempo (°C)",
-              data: simulatedResponse.map((item) => item.value), // Usa os valores simulados
-              backgroundColor: "rgba(75, 192, 192, 0.2)",
-              borderColor: "rgba(75, 192, 192, 1)",
-              tension: 0.4,
-              fill: true,
-            },
-          ],
-        };
-
-        setDataBar({
-          ...barData,
-          datasets: barData.datasets.map((dataset) => ({
-            ...dataset,
-            data: dataset.data.map((value) => Number(value)),
-          })),
-        });
-        setDataLine(lineData);
-
-        setErros([
+    const ws = connectWebSocketAr((data) => {
+      const barData = {
+        labels: ["Temperatura"],
+        datasets: [
           {
-            titulo: "Conexão",
-            detalhe:
-              "Erro detectado",
+            label: "Temperatura (°C)",
+            data: [data.ar.Temperatura],
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1,
           },
+        ],
+      };
+
+      setDataBar(barData);
+      const posicao = data.ar.Posicao || 0;
+      const doughnutData = {
+        labels: ["Posição"],
+        datasets: [
           {
-            titulo: "Sensor",
-            detalhe:
-              "Nenhum erro aparente",
+            data: [posicao, 100 - posicao],
+            backgroundColor: ["#FF6384", "#36A2EB"],
+            hoverBackgroundColor: ["#FF6384", "#36A2EB"],
           },
-        ]);
-      } finally {
-        setLoading(false);
-      }
+        ],
+      };
+
+      setDataDoughnut(doughnutData);
+      setLoading(false);
+    });
+
+    return () => {
+      ws.close();
+      console.log("Conexão WebSocket encerrada.");
     };
-
-    fetchData();
   }, []);
 
   if (loading) {
@@ -230,17 +165,18 @@ export default function Ar() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-1">
-      <h1 className="text-3xl font-bold mb-6 text-center mt-5">Control Ar</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center mt-5">Control Ar</h1>
         <div className="max-w-5xl mx-auto space-y-4">
-          {/* Gráfico de Temperatura */}
-          <div className="flex justify-center mt-10">
-            <Card>
-              <CardContent className="pb-0 pt-2 pl-33  pr-27 flex flex-col items-center">
+          {/* Gráficos de Temperatura e Posição */}
+          <div className="flex justify-center mt-10 space-x-4">
+            {/* Gráfico de Temperatura */}
+            <Card className="flex-1">
+              <CardContent className="pb-0 pt-2 pl-20 pr-15 flex flex-col items-center">
                 <h2 className="font-bold text-lg mb-2 text-center">
                   Temperatura
                 </h2>
                 <div className="flex items-center justify-center w-full mb-15 mr-1.5">
-                  <div className="w-70 h-30">
+                  <div className="w-full h-60">
                     {dataBar ? (
                       <Bar data={dataBar} />
                     ) : (
@@ -250,13 +186,12 @@ export default function Ar() {
                 </div>
               </CardContent>
             </Card>
-          </div>
 
-          {/* Gráficos de Posição */}
-          <div className="flex justify-center mt-10 mb-10">
-            <Card>
+            {/* Gráfico de Posição */}
+            <Card className="flex-1">
               <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
-                <GraficoPosicaoAr />
+                <h2 className="font-bold text-lg mb-2 text-center">Posição</h2>
+                {dataDoughnut ? <PosicaoAr /> : <p>Erro ao trazer Dados...</p>}
               </CardContent>
             </Card>
           </div>
@@ -267,14 +202,10 @@ export default function Ar() {
               <h2 className="font-bold text-xl mb-4 text-center">
                 Temperatura por Tempo (24h)
               </h2>
-              {dataLine ? (
-                <GraficoLinhaTemperatura data={dataLine} />
-              ) : (
-                <p>Erro ao trazer dados...</p>
-              )}
+              <GraficoLinhaTemperatura />
             </CardContent>
           </Card>
-          
+
           {/* Tabela de Erros */}
           <div className="mb-20">
             <TabelaDeErros
@@ -295,3 +226,26 @@ export default function Ar() {
     </>
   );
 }
+
+import React from "react";
+import { Doughnut } from "react-chartjs-2";
+import PosicaoAr from "./GraficoPosicaoAr";
+
+interface GraficoPosicaoArProps {
+  data: {
+    labels: string[];
+    datasets: {
+      data: number[];
+      backgroundColor: string[];
+      hoverBackgroundColor: string[];
+    }[];
+  };
+}
+
+const GraficoPosicaoArComponent: React.FC<GraficoPosicaoArProps> = ({
+  data,
+}) => {
+  return <Doughnut data={data} />;
+};
+
+export { GraficoPosicaoArComponent };

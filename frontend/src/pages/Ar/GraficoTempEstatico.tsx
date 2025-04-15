@@ -12,8 +12,15 @@ import {
 } from "chart.js";
 import ClipLoader from "react-spinners/ClipLoader";
 
-// Registra os componentes necessários do Chart.js
-ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, Tooltip, Legend);
+ChartJS.register(
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  CategoryScale,
+  Tooltip,
+  Legend
+);
 
 export default function GraficoLinhaTemperatura() {
   const [dataLine, setDataLine] = useState<any>(null);
@@ -87,7 +94,11 @@ export default function GraficoLinhaTemperatura() {
           margin: "0 auto",
         }}
       >
-        {dataLine ? <Line data={dataLine} options={options} /> : <p>Erro ao carregar gráfico.</p>}
+        {dataLine ? (
+          <Line data={dataLine} options={options} />
+        ) : (
+          <p>Erro ao carregar gráfico.</p>
+        )}
       </div>
     </div>
   );

@@ -44,7 +44,7 @@ export const serverConnection = async () => {
   }
 };
 
-// Função para conectar ao WebSocket
+// Função genérica para conectar ao WebSocket
 export const connectWebSocket = (onMessage: (data: any) => void) => {
   try {
     const ws = new WebSocket(WEBSOCKET_URL);
@@ -56,7 +56,7 @@ export const connectWebSocket = (onMessage: (data: any) => void) => {
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log("Mensagem recebida do WebSocket:", data);
-      onMessage(data); // Chama a função de callback com os dados recebidos
+      onMessage(data);
     };
 
     ws.onerror = (error) => {
@@ -67,9 +67,37 @@ export const connectWebSocket = (onMessage: (data: any) => void) => {
       console.log("Conexão WebSocket encerrada.");
     };
 
-    return ws; // Retorna a instância do WebSocket para controle externo
+    return ws;
   } catch (error) {
     console.error("Erro ao conectar ao WebSocket:", error);
+    throw error;
+  }
+};
+
+export const connectWebSocketAr = (onMessage: (data: any) => void) => {
+  try {
+    const ws = new WebSocket("ws://localhost:3000/ws/ar"); // Substitua pela URL correta do WebSocket
+
+    ws.onopen = () => {
+      console.log("Conexão WebSocket de 'ar' estabelecida.");
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      onMessage(data);
+    };
+
+    ws.onerror = (error) => {
+      console.error("Erro no WebSocket de 'ar':", error);
+    };
+
+    ws.onclose = () => {
+      console.log("Conexão WebSocket de 'ar' encerrada.");
+    };
+
+    return ws;
+  } catch (error) {
+    console.error("Erro ao conectar ao WebSocket de 'ar':", error);
     throw error;
   }
 };
