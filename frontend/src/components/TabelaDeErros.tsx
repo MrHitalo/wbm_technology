@@ -16,7 +16,7 @@ export default function TabelaDeErros({ tituloTabela = "Tabela de Erros", erros 
   return (
     <div className="flex justify-center mt-20">
       <div className="bg-white shadow-md rounded-xl p-6 w-full max-w-5xl border-3 ">
-        <h4 className="text-lg font-bold text-gray-800">{tituloTabela}</h4>
+        <h4 className="text-3xl font-bold text-gray-800">{tituloTabela}</h4>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mt-4">
           {erros.map((erro, index) => (
@@ -27,10 +27,10 @@ export default function TabelaDeErros({ tituloTabela = "Tabela de Erros", erros 
               }`}
             >
               <div>
-                <h6 className="text-sm font-semibold text-gray-900 mb-1">{erro.titulo}:</h6>
-                <p className="text-sm text-gray-500">{erro.detalhe}</p>
+                <h6 className="text-lg font-semibold text-gray-900 mb-1">{erro.titulo}:</h6>
+                {/* <p className="text-sm text-gray-500">{erro.detalhe}</p>  */}
               </div>
-              <Eye className="text-gray-600 w-5 h-5" />
+              {/* <Eye className="text-gray-600 w-5 h-5" /> */}
             </div>
           ))}
         </div>

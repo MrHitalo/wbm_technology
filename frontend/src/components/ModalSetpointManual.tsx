@@ -21,7 +21,7 @@ const ModalSetpointManual: React.FC<ModalSetpointManualProps> = ({ closeModal })
                 {/* Inputs */}
                 <form className={`mt-6 text-black`}>
                     <div className="flex flex-col">
-                        <label htmlFor="setpoint-manual" className="scroll-mb-0.5 font-medium">Setpoint Manual</label>
+                        <label htmlFor="setpoint-manual" className="scroll-mb-0.5 font-medium">SETPOINT MANUAL</label>
                         <input
                             id="setpoint-manual"
                             type="number"

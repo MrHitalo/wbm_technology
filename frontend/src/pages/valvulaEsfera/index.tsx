@@ -19,19 +19,20 @@ import { CampoConfiguracao } from "../../components/ModalConfigurar";
 // imports de biblioteca
 import GraficoPosicaoEsfera from "./GraficoPosicaoEsfera";
 import MySidebar from "../../components/MySidebar";
-
+import GraficoErroEsfera from "./GraficoErroEsfera";
+import BallValve from "../../assets/LOGO CONTROLFLOW_BALL_VALVEBRANCO.png"
+import IotControl from "../../assets/IOT_CONTROL_BRANCA.png"
 
 
 const erros = [
-  { titulo: "Tempo excedido", detalhe: "Sem erro aparente" },
-  { titulo: "Motor Não Funcionando", detalhe: "Erro detectado" },
-  { titulo: "Sensor de Temperatura com Defeito", detalhe: "Erro detectado" },
-  { titulo: "Motor Travou", detalhe: "Sem erro aparente" },
-  { titulo: "Válvula sem Comunicação", detalhe: "Sem erro aparente" },
+  { titulo: "ERRO 1: MOTOR NÃO FUNCIONOU", detalhe: "Sem erro aparente" },
+  { titulo: "ERRO 2: TEMPO EXCEDIDO", detalhe: "Erro detectado" },
+  { titulo: "ERRO 3: MOTOR TRAVADO", detalhe: "Erro detectado" },
+  { titulo: "ERRO 4: SENSOR COM DEFEITO", detalhe: "Sem erro aparente" },
+  { titulo: "ERRO 5: ALIMENTADOR SEM COMUNICAÇÃO", detalhe: "Sem erro aparente" },
 ];
 
 const campos: CampoConfiguracao[] = [
-  { id: "valvula-id", label: "ID DA VÁLVULA", placeholder: "Ex: 001", tipo: "text" },
   { id: "hora-liga", label: "DEFINIR HORA A LIGAR", placeholder: "08:00", tipo: "time" },
   { id: "hora-desliga", label: "DEFINIR HORA A DESLIGAR", placeholder: "18:00", tipo: "time" },
   { id: "setpoint", label: "CONFIGURAR SETPOINT", placeholder: "8", tipo: "number" },
@@ -43,6 +44,7 @@ export default function ValvulaEsfera() {
   const [modalAberto, setModalAberto] = useState(false);
   const [modalSetpointManualAberto, setModalSetpointManualAberto] = useState(false);
   const [setpointManualAtivo, setSetpointManualAtivo] = useState(false);
+  const [mostrarTabelaErros, setMostrarTabelaErros] = useState(false);
 
 
   return (
@@ -76,23 +78,47 @@ export default function ValvulaEsfera() {
                 onCheckedChange={setSetpointManualAtivo}
                 className="mt-1 mr-4 scale-125">
               </Switch>
-              <h1>{setpointManualAtivo ? "Setpoint Manual" : "Setpoint Automático"}</h1>
+              <h1>{setpointManualAtivo ? "Modo Manual" : "Modo Automático"}</h1>
+            </div>
+            <div className="space-y-1 text-center col-span-2 mx-auto mt-5">
+              <label className="block font-medium">Quantidade de ciclos</label>
+              <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">2</div>
             </div>
           </CardContent>
         </Card>
       </div>
 
       <div className="min-h-screen bg-primary text-white p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center mt-5">Control Flow Ball</h1>
+      <div className="flex justify-center mt-10 ">
+          <img src={BallValve} alt="Control Ar" className="h-27 w-auto mr-15" />
+          <img src={IotControl} alt="Iot Control" className="h-24 w-auto ml-15" />
+        </div>
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Gauge Chart de temperatura */}
-          <div className="flex justify-center mt-10">
-            <Card>
+          <div className="flex justify-center mt-10 space-x-4">
+            <Card className="flex-1">
               <CardContent className="pb-4 pt-2 px-10 flex flex-col items-center">
                 <GraficoPosicaoEsfera />
               </CardContent>
             </Card>
+
+            <Card className="flex-1">
+              <CardContent className="pb-4 pt-2 px-10 flex flex-col items-center">
+                <GraficoErroEsfera
+                  mostrarTabelaErros={mostrarTabelaErros}
+                  setMostrarTabelaErros={setMostrarTabelaErros}
+                />
+              </CardContent>
+            </Card>
+
           </div>
+    
+          {/* Nova Tabela de Erros*/}
+          {mostrarTabelaErros && (
+            <div className="mb-20">
+              <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
+            </div>
+          )}
 
           {/* Configurações da Válvula */}
           {setpointManualAtivo ? (
@@ -101,14 +127,9 @@ export default function ValvulaEsfera() {
             <ConfiguracoesValvulaEsfera />
           )}
 
-          {/* Nova Tabela de Erros*/}
-          <div className="mb-20">
-            <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
-          </div>
+          {modalAberto && (<ModalConfiguracao closeModal={() => setModalAberto(false)} campos={campos} />)}
 
-          {modalAberto && (<ModalConfiguracao closeModal={() => setModalAberto(false)} campos={campos}/>)}
-
-          {modalSetpointManualAberto && (<ModalSetpointManual closeModal={() => setModalSetpointManualAberto(false)}/>)}
+          {modalSetpointManualAberto && (<ModalSetpointManual closeModal={() => setModalSetpointManualAberto(false)} />)}
         </div>
       </div>
       <Footer />

@@ -12,7 +12,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "modbus-serial": "^8.0.20-no-serial-port",
-    "serialport": "^13.0.0"
+    "serialport": "^13.0.0",
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "typescript": "^5.8.2"

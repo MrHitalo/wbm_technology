@@ -14,16 +14,22 @@ import GraficoTemperatura2 from "./GraficoTemperatura2";
 import GraficoTemperatura3 from "./GraficoTemperatura3";
 import GraficoTemperatura4 from "./GraficoTemperatura4";
 import MySidebar from "../../components/MySidebar";
+import GraficoErrosTemp from "./GraficoErrosMonitorTemp";
+import { useState } from "react";
+import IotControl from "../../assets/IOT_CONTROL_BRANCA.png"
+import TempMonitor from "../../assets/IoT_TEMP_MONITOR_BRANCO.png"
 
 const erros = [
-  { titulo: "Sensor 1 desconectado", detalhe: "Sem erro aparente" },
-  { titulo: "Sensor 2 desconectado", detalhe: "Erro detectado" },
-  { titulo: "Sensor 3 desconectado", detalhe: "Erro detectado" },
-  { titulo: "Sensor 4 desconectado", detalhe: "Sem erro aparente" },
-  { titulo: "Alimentador sem comunicação", detalhe: "Sem erro aparente" },
+  { titulo: "ERRO 1: SENSOR 1 DESCONECTADO", detalhe: "Sem erro aparente" },
+  { titulo: "ERRO 2: SENSOR 2 DESCONECTADO", detalhe: "Erro detectado" },
+  { titulo: "ERRO 3: SENSOR 3 DESCONECTADO", detalhe: "Erro detectado" },
+  { titulo: "ERRO 4: SENSOR 4 DESCONECTADO", detalhe: "Sem erro aparente" },
+  { titulo: "ERRO 5: ALIMENTADOR SEM COMUNICAÇÃO", detalhe: "Sem erro aparente" },
 ];
 
 export default function MonitorDeTemperatura() {
+    const [mostrarTabelaErros, setMostrarTabelaErros] = useState(false);
+  
   return (
     <>
       <MySidebar />
@@ -44,31 +50,47 @@ export default function MonitorDeTemperatura() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center mt-5">TempMonitor</h1>
+      <div className="flex justify-center mt-10 ">
+        <img src={TempMonitor} alt="Control Ar" className="h-18 w-auto mr-15" />
+        <img src={IotControl} alt="Iot Control" className="h-24 w-auto ml-15" />
+        </div>
         <div className="max-w-5xl mx-auto space-y-4">
-          {/* Grafico de temperatura 1 */}
-          <div className="flex justify-center mt-10">
-            <Card>
-              <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
+          {/* Graficos de Temperatura */}
+          <Card className="mt-10">
+            <CardContent className="p-4 flex flex-col items-center">
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-50 ">
                 <GraficoTemperatura1 />
+                <GraficoTemperatura2 />
+                </div>  
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-50 mt-10">
+
+                <GraficoTemperatura3 />
+                <GraficoTemperatura4 />
+              </div>
+                
+            </CardContent>
+          </Card>
+
+          {/* Grafico de erro */}
+          <div className="flex justify-center mt-10 space-x-4">
+            <Card>
+              <CardContent className="pb-4 pt-2 px-10 flex flex-col items-center">
+                <GraficoErrosTemp
+                                  mostrarTabelaErros={mostrarTabelaErros}
+                                  setMostrarTabelaErros={setMostrarTabelaErros}
+                                />
               </CardContent>
             </Card>
           </div>
 
-          {/* Graficos de Temperatura */}
-          <Card className="mt-10">
-            <CardContent className="p-4 flex flex-col items-center">
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-50 ">
-                <GraficoTemperatura2 />
-                <GraficoTemperatura3 />
-              </div>
-                <GraficoTemperatura4 />
-            </CardContent>
-          </Card>
 
-          <div className="mb-20">
-            <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
-          </div>
+          {/* Nova Tabela de Erros*/}
+                    {mostrarTabelaErros && (
+                      <div className="mb-20">
+                        <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
+                      </div>
+                    )}
 
         </div>
       </div>

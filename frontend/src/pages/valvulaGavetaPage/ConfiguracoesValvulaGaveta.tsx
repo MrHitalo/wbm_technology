@@ -6,7 +6,7 @@ export default function ConfiguracoesValvulaGaveta() {
     <div className="max-w-2xl mx-auto space-y-4 mt-15">
       <Card>
         <CardContent className="p-3">
-          <h2 className="font-bold text-center text-lg">CONFIGURAÇÃO ATUAL</h2>
+          <h2 className="font-bold text-center text-lg mb-7">CONFIGURAÇÃO ATUAL</h2>
           {/* <div className="pt-4 flex justify-center">
             <div className="text-sm text-center space-y-2 pb-4">
               <label className="block font-medium text-lg">Id da válvula</label>
@@ -35,17 +35,9 @@ export default function ConfiguracoesValvulaGaveta() {
               <label className="block font-medium">SETPOINT</label>
               <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">2</div>
             </div>
-            <div className="space-y-1 text-center">
+            <div className="space-y-1 text-center col-span-2">
               <label className="block font-medium">TEMPO ABERTO CONFIGURADO</label>
-              <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">2</div>
-            </div>
-            <div className="space-y-1 text-center">
-              <label className="block font-medium">QUANTIDADE DE CICLOS</label>
-              <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">2</div>
-            </div>
-            <div className="space-y-1 text-center col-span-2 mx-auto">
-              <label className="block font-medium">SETPOINT MANUAL</label>
-              <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">2</div>
+              <div className="inline-block border-b border-gray-200 px-15 pb-0.5 text-center">2</div>
             </div>
           </div>
         </CardContent>

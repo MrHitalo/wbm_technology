@@ -43,7 +43,7 @@ export default function GraficoPosicaoEsfera() {
                                 <h2 className="font-bold text-lg mb-2 text-center">Posição Da Válvula</h2>
                                 {/* <h1 className="font-normal text-lg  text-center text-black ">Temperatura 4</h1> */}
                                   <div className="w-80 h-52 flex flex-col items-center justify-center">
-                                    <Doughnut className="mt-1" data={dataGauge} options={optionsGauge} />
+                                    <Doughnut className="mt-18" data={dataGauge} options={optionsGauge} />
                                       <span className="font-bold text-4xl -mt-10">{value + "%"}</span>
                                     </div>
                                   </div>       

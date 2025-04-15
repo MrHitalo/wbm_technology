@@ -13,7 +13,7 @@ export default function AppSidebar() {
       <aside
         className={`
           fixed top-0 left-0 h-screen bg-white border-r border-gray-200
-          transition-transform duration-300 z-10 w-64 
+          transition-transform duration-300 z-10 w-80
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
@@ -21,7 +21,7 @@ export default function AppSidebar() {
         <div className="p-4 border-b border-gray-200 flex items-center gap-3">
           {isOpen && (
             <>
-              <img src={logo} alt="Logo WBM" className="h-12 w-auto" />
+              <img src={logo} alt="Logo WBM" className="h-24 w-auto" />
             </>
           )}
         </div>

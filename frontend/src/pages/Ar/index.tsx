@@ -12,35 +12,14 @@ import { CampoConfiguracao } from "../../components/ModalConfigurar";
 import MySidebar from "../../components/MySidebar";
 import GraficoLinhaTemperatura from "./GraficoTempEstatico";
 import { connectWebSocketAr } from "../../service/deviceService";
+import GraficoErrosAr from "./GraficoErrosAr";
+import ControlAr from "../../assets/CONTROL_AR_BRANCO.png"
+import IotControl from "../../assets/IOT_CONTROL_BRANCA.png"
 
 const campos: CampoConfiguracao[] = [
   {
-    id: "valvula-id",
-    label: "ID DO SENSOR",
-    placeholder: "Ex: S001",
-    tipo: "text",
-  },
-  {
-    id: "hora-liga",
-    label: "INÍCIO DO CICLO",
-    placeholder: "twatw",
-    tipo: "time",
-  },
-  {
-    id: "hora-desliga",
-    label: "FIM DO CICLO",
-    placeholder: "twatw",
-    tipo: "time",
-  },
-  {
-    id: "quantidade-ciclo",
-    label: "DOSE POR CICLO (ml)",
-    placeholder: "Ex: 301",
-    tipo: "number",
-  },
-  {
-    id: "tempo-ciclo",
-    label: "DURAÇÃO DO CICLO (s)",
+    id: "Setpoint",
+    label: "SETPOINT MANUAL",
     placeholder: "Ex: 5",
     tipo: "number",
   },
@@ -48,6 +27,8 @@ const campos: CampoConfiguracao[] = [
 
 export default function Ar() {
   const [modalAberto, setModalAberto] = useState(false);
+  const [mostrarTabelaErros, setMostrarTabelaErros] = useState(false);
+
 
   const [dataBar, setDataBar] = useState<{
     labels: string[];
@@ -73,12 +54,32 @@ export default function Ar() {
 
   const [erros, setErros] = useState([
     {
-      titulo: "Status de conexão",
+      titulo: "ERRO 1: MOTOR NÃO FUNCIONOU",
       detalhe: "Erro detectado",
     },
     {
-      titulo: "Status do Sensor",
+      titulo: "ERRO 2: TEMPERATURA ALTA",
       detalhe: "Nenhum erro aparente",
+    },
+    {
+      titulo: "ERRO 3: PORTINHOLA TRAVADA",
+      detalhe: "Erro detectado",
+    },
+    {
+      titulo: "ERRO 4: SENSOR DE POSIÇÃO COM DEFEITO",
+      detalhe: "Erro detectado",
+    },
+    {
+      titulo: "ERRO 5: SENSOR DE TEMPERATURA COM DEFEITO",
+      detalhe: "Erro detectado",
+    },
+    {
+      titulo: "ERRO 6: DESACOPLAMENTO DO EIXO",
+      detalhe: "Erro detectado",
+    },
+    {
+      titulo: "ERRO 7: SEM COMUNICAÇÃO",
+      detalhe: "Erro detectado",
     },
   ]);
 
@@ -151,7 +152,7 @@ export default function Ar() {
               className="w-full h-36 object-contain"
             />
             <h3 className="font-semibold text-lg text-center leading-snug">
-              Válvula de Ar
+              Control Flow Ar
             </h3>
             <Button
               className="w-full"
@@ -160,12 +161,20 @@ export default function Ar() {
             >
               Configurar
             </Button>
+            <div className="space-y-1 text-center col-span-2 mx-auto mt-5">
+              <label className="block font-medium">Quantidade de ciclos</label>
+              <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">2</div>
+            </div>
           </CardContent>
         </Card>
       </div>
 
       <div className="min-h-screen bg-primary text-white p-1">
-        <h1 className="text-3xl font-bold mb-6 text-center mt-5">Control Ar</h1>
+        <div className="flex justify-center mt-10 ">
+        <img src={ControlAr} alt="Control Ar" className="h-20 w-auto mr-15" />
+        <img src={IotControl} alt="Iot Control" className="h-24 w-auto ml-15" />
+        </div>
+
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Gráficos de Temperatura e Posição */}
           <div className="flex justify-center mt-10 space-x-4">
@@ -196,6 +205,25 @@ export default function Ar() {
             </Card>
           </div>
 
+          {/* Grafico de erro */}
+          <div className="flex justify-center mt-10 space-x-4">
+            <Card>
+              <CardContent className="pb-4 pt-2 px-10 flex flex-col items-center">
+                <GraficoErrosAr
+                  mostrarTabelaErros={mostrarTabelaErros}
+                  setMostrarTabelaErros={setMostrarTabelaErros}
+                />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Nova Tabela de Erros*/}
+          {mostrarTabelaErros && (
+            <div className="mb-20">
+              <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
+            </div>
+          )}
+
           {/* Gráfico de Temperatura por Tempo */}
           <Card>
             <CardContent className="p-4 flex flex-col items-center">
@@ -205,14 +233,6 @@ export default function Ar() {
               <GraficoLinhaTemperatura />
             </CardContent>
           </Card>
-
-          {/* Tabela de Erros */}
-          <div className="mb-20">
-            <TabelaDeErros
-              tituloTabela="Erros da Válvula de Ar"
-              erros={erros}
-            />
-          </div>
 
           {modalAberto && (
             <ModalConfiguracao
@@ -230,6 +250,7 @@ export default function Ar() {
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import PosicaoAr from "./GraficoPosicaoAr";
+
 
 interface GraficoPosicaoArProps {
   data: {
