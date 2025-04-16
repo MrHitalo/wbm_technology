@@ -1,11 +1,9 @@
-import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Switch } from "../../components/ui/switch";
 
 import {
   Chart as ChartJS,
   ArcElement,
-  Tooltip,
   Legend,
   ScriptableContext,
 } from "chart.js";
@@ -18,7 +16,7 @@ const dataGauge = {
   labels: [],
   datasets: [
     {
-      data: [1], 
+      data: [1],
       backgroundColor: (ctx: ScriptableContext<"doughnut">) => {
         return value < 1 ? "rgb(234, 234, 234)" : "rgb(231, 24, 49)";
       },
@@ -50,21 +48,23 @@ export default function GraficoErrosAr({
 }) {
   return (
     <div className="GraficoErroEsfera">
-      <h2 className="font-bold text-lg mb-2 text-center">Identificador de Erros</h2>
+      <h2 className="font-bold text-lg mb-2 text-center">
+        Identificador de Erros
+      </h2>
       <div className="w-96 h-60 flex flex-col items-center justify-center">
         <Doughnut className="mt-1" data={dataGauge} options={optionsGauge} />
         <span className="absolute top-[90.5%] font-bold text-5xl">{value}</span>
       </div>
       <div className="flex items-center justify-center mt-4 space-x-2">
-      <Switch
-        checked={mostrarTabelaErros}
-        onCheckedChange={setMostrarTabelaErros}
-        className="scale-125"
-      />
-      <span className="text-md text-black font-medium pl-2">
-        Tabela de Erros
-      </span>
+        <Switch
+          checked={mostrarTabelaErros}
+          onCheckedChange={setMostrarTabelaErros}
+          className="scale-125"
+        />
+        <span className="text-md text-black font-medium pl-2">
+          Tabela de Erros
+        </span>
+      </div>
     </div>
-  </div>
   );
 }

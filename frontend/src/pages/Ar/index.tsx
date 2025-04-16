@@ -11,10 +11,11 @@ import ModalConfiguracao from "../../components/ModalConfigurar";
 import { CampoConfiguracao } from "../../components/ModalConfigurar";
 import MySidebar from "../../components/MySidebar";
 import GraficoLinhaTemperatura from "./GraficoTempEstatico";
-import { connectWebSocketAr } from "../../service/deviceService";
+import WebSocketManager from "../../service/webSocketManager";
+import PosicaoAr from "./GraficoPosicaoAr";
 import GraficoErrosAr from "./GraficoErrosAr";
-import ControlAr from "../../assets/CONTROL_AR_BRANCO.png"
-import IotControl from "../../assets/IOT_CONTROL_BRANCA.png"
+import ControlAr from "../../assets/CONTROL_AR_BRANCO.png";
+import IotControl from "../../assets/IOT_CONTROL_BRANCA.png";
 
 const campos: CampoConfiguracao[] = [
   {
@@ -28,7 +29,7 @@ const campos: CampoConfiguracao[] = [
 export default function Ar() {
   const [modalAberto, setModalAberto] = useState(false);
   const [mostrarTabelaErros, setMostrarTabelaErros] = useState(false);
-
+  const [quantidadeCiclos, setQuantidadeCiclos] = useState<number>(0);
 
   const [dataBar, setDataBar] = useState<{
     labels: string[];
@@ -40,13 +41,11 @@ export default function Ar() {
       borderWidth: number;
     }[];
   } | null>(null);
-
   const [dataDoughnut, setDataDoughnut] = useState<{
     labels: string[];
     datasets: {
       data: number[];
       backgroundColor: string[];
-      hoverBackgroundColor: string[];
     }[];
   } | null>(null);
 
@@ -86,7 +85,18 @@ export default function Ar() {
   useEffect(() => {
     setLoading(true);
 
-    const ws = connectWebSocketAr((data) => {
+    const webSocketManager = WebSocketManager.getInstance();
+    webSocketManager.connect("ws://localhost:3000/ws/ar");
+
+    interface ArData {
+      ar: {
+        Temperatura: number;
+        Posicao: number;
+      };
+      ciclos: number;
+    }
+
+    const handleData = (data: ArData) => {
       const barData = {
         labels: ["Temperatura"],
         datasets: [
@@ -99,27 +109,34 @@ export default function Ar() {
           },
         ],
       };
-
       setDataBar(barData);
-      const posicao = data.ar.Posicao || 0;
       const doughnutData = {
-        labels: ["Posição"],
+        labels: ["Posição Atual"],
         datasets: [
           {
-            data: [posicao, 100 - posicao],
-            backgroundColor: ["#FF6384", "#36A2EB"],
-            hoverBackgroundColor: ["#FF6384", "#36A2EB"],
+            data: [data.ar.Posicao, 100 - data.ar.Posicao],
+            backgroundColor: ["#00C49F", "#EAEAEA"],
           },
         ],
       };
-
       setDataDoughnut(doughnutData);
+
+      if (data.ciclos !== undefined) {
+        setQuantidadeCiclos(data.ciclos);
+      }
+
       setLoading(false);
-    });
+    };
+
+    webSocketManager.subscribe(handleData);
+
+    const latestData = webSocketManager.getLatestData();
+    if (){
+
+    }
 
     return () => {
-      ws.close();
-      console.log("Conexão WebSocket encerrada.");
+      webSocketManager.unsubscribe(handleData);
     };
   }, []);
 
@@ -163,7 +180,9 @@ export default function Ar() {
             </Button>
             <div className="space-y-1 text-center col-span-2 mx-auto mt-5">
               <label className="block font-medium">Quantidade de ciclos</label>
-              <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">2</div>
+              <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">
+                {quantidadeCiclos}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -171,8 +190,12 @@ export default function Ar() {
 
       <div className="min-h-screen bg-primary text-white p-1">
         <div className="flex justify-center mt-10 ">
-        <img src={ControlAr} alt="Control Ar" className="h-20 w-auto mr-15" />
-        <img src={IotControl} alt="Iot Control" className="h-24 w-auto ml-15" />
+          <img src={ControlAr} alt="Control Ar" className="h-20 w-auto mr-15" />
+          <img
+            src={IotControl}
+            alt="Iot Control"
+            className="h-24 w-auto ml-15"
+          />
         </div>
 
         <div className="max-w-5xl mx-auto space-y-4">
@@ -200,7 +223,11 @@ export default function Ar() {
             <Card className="flex-1">
               <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
                 <h2 className="font-bold text-lg mb-2 text-center">Posição</h2>
-                {dataDoughnut ? <PosicaoAr /> : <p>Erro ao trazer Dados...</p>}
+                {dataDoughnut ? (
+                  <PosicaoAr data={dataDoughnut} />
+                ) : (
+                  <p>Erro ao trazer Dados...</p>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -219,7 +246,7 @@ export default function Ar() {
 
           {/* Nova Tabela de Erros*/}
           {mostrarTabelaErros && (
-            <div className="mb-20">
+            <div className="mb-20 text-center">
               <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
             </div>
           )}
@@ -246,27 +273,3 @@ export default function Ar() {
     </>
   );
 }
-
-import React from "react";
-import { Doughnut } from "react-chartjs-2";
-import PosicaoAr from "./GraficoPosicaoAr";
-
-
-interface GraficoPosicaoArProps {
-  data: {
-    labels: string[];
-    datasets: {
-      data: number[];
-      backgroundColor: string[];
-      hoverBackgroundColor: string[];
-    }[];
-  };
-}
-
-const GraficoPosicaoArComponent: React.FC<GraficoPosicaoArProps> = ({
-  data,
-}) => {
-  return <Doughnut data={data} />;
-};
-
-export { GraficoPosicaoArComponent };

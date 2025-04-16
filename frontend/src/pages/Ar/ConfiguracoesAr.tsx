@@ -1,26 +1,10 @@
-import { useEffect, useState } from "react";
 import { Card, CardContent } from "../../components/ui/card";
-import { fetchAr } from "../../service/deviceService";
 
-export default function ConfiguracoesAr() {
-  const [data, setData] = useState<{ name: string; value: unknown }[] | null>(
-    null
-  );
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetchAr();
-        setData(response);
-      } catch (error) {
-        console.error("Erro ao buscar os dados:", error);
-      }
-    };
-    fetchData();
-  });
-
+export default function ConfiguracoesAr({
+  quantidadeCiclos,
+}: {
+  quantidadeCiclos: number;
+}) {
   return (
     <div className="max-w-2xl mx-auto space-y-4 mt-15">
       <Card>
@@ -66,6 +50,12 @@ export default function ConfiguracoesAr() {
               </label>
               <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">
                 2
+              </div>
+            </div>
+            <div className="space-y-1 text-center">
+              <label className="block font-medium">QUANTIDADE DE CICLOS</label>
+              <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">
+                {quantidadeCiclos} {/* Exibe a quantidade de ciclos recebida */}
               </div>
             </div>
           </div>

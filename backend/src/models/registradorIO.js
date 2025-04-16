@@ -52,7 +52,7 @@ const mapa_leitura = {
   },
   ar: {
     adress: 18,
-    fields: ["Posicao", "Erro", "Temperatura", "Quantidade de Ciclos"],
+    fields: ["Posicao", "Erro", "Temperatura", "Ciclos"],
   },
   temperatura: {
     adress: 22,
