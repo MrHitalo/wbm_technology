@@ -81,7 +81,7 @@ export default function ValvulaGaveta() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-4">
-        <div className="flex justify-center mt-10 ">
+        <div className="flex justify-center mt-12 space-x-10">
           <img src={GateValve} alt="Control Ar" className="h-27 w-auto mr-15" />
           <img src={IotControl} alt="Iot Control" className="h-24 w-auto ml-15" />
         </div>

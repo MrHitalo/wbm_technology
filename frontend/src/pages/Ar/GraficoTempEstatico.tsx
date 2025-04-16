@@ -1,105 +1,88 @@
-import { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
+import React from 'react';
 import {
   Chart as ChartJS,
-  LineElement,
-  PointElement,
-  LinearScale,
-  Title,
   CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import ClipLoader from "react-spinners/ClipLoader";
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import { Card, CardContent } from '../../components/ui/card';
 
 ChartJS.register(
-  LineElement,
-  PointElement,
-  LinearScale,
-  Title,
   CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
   Tooltip,
   Legend
 );
 
-export default function GraficoLinhaTemperatura() {
-  const [dataLine, setDataLine] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+const horas = [
+  '00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
+  '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+  '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
+  '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
+];
 
-  useEffect(() => {
-    const fetchData = () => {
-      setLoading(true);
-      const simulatedResponse = Array.from({ length: 24 }, (_, i) => {
-        const baseTemperature = 25;
-        const variation = Math.random() * 3 - 1.5;
-        return {
-          name: `Temperatura ${i}:00`,
-          value: parseFloat((baseTemperature + variation).toFixed(1)),
-        };
-      });
+// 🔧 Altere esses valores como quiser
+const dadosTemperatura = [
+  59, 61, 63, 64, 67, 68,
+  70, 72, 74, 75, 76, 77,
+  77, 77, 77, 77, 76, 75,
+  74, 72, 71, 69, 68, 66
+];
 
-      const lineData = {
-        labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
-        datasets: [
-          {
-            label: "Temperatura por Tempo (°C)",
-            data: simulatedResponse.map((item) => item.value),
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
-            borderColor: "rgba(75, 192, 192, 1)",
-            tension: 0.4,
-            fill: true,
-          },
-        ],
-      };
+const data = {
+  labels: horas,
+  datasets: [
+    {
+      label: 'Temperatura (°C)',
+      data: dadosTemperatura,
+      borderColor: 'rgba(75, 192, 192, 1)',
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      fill: true,
+      tension: 0.3,
+    },
+  ],
+};
 
-      setDataLine(lineData);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  const options = {
-    responsive: true,
-    scales: {
-      y: {
-        min: 10,
-        max: 40,
-        ticks: {
-          stepSize: 0.5,
-          callback: function (value: number) {
-            return value.toFixed(1);
-          },
-        },
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: false,
+    },
+  },
+  scales: {
+    y: {
+      min: 40,
+      max: 80,
+      title: {
+        display: true,
+        text: 'Temperatura (°C)',
       },
     },
-  };
+    x: {
+      title: {
+        display: true,
+        text: 'Hora do Dia',
+      },
+    },
+  },
+};
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <ClipLoader color="#36a2eb" size={60} />
-      </div>
+const GraficoEstatico: React.FC = () => {
+    return (      
+          <Line options={options} data={data} />
     );
-  }
-
-  return (
-    <div className="w-full" style={{ height: "500px" }}>
-      <div
-        className="w-full"
-        style={{
-          height: "500px",
-          width: "90vw",
-          maxWidth: "1000px",
-          margin: "0 auto",
-        }}
-      >
-        {dataLine ? (
-          <Line data={dataLine} options={options} />
-        ) : (
-          <p>Erro ao carregar gráfico.</p>
-        )}
-      </div>
-    </div>
-  );
-}
+  };
+  
+  export default GraficoEstatico;

@@ -50,15 +50,17 @@ export default function MonitorDeTemperatura() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-4">
-      <div className="flex justify-center mt-10 ">
-        <img src={TempMonitor} alt="Control Ar" className="h-18 w-auto mr-15" />
-        <img src={IotControl} alt="Iot Control" className="h-24 w-auto ml-15" />
+      <div className="flex justify-center mt-12 space-x-10 ">
+        <img src={TempMonitor} alt="Control Ar" className="h-20 w-auto mr-15" />
+        <img src={IotControl} alt="Iot Control" className="h-24 w-auto ml-15 " />
         </div>
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Graficos de Temperatura */}
           <Card className="mt-10">
             <CardContent className="p-4 flex flex-col items-center">
-              
+            <h2 className="font-bold text-xl mb-8 text-center">
+                GRÁFICOS DA TEMPERATURA ATUAL
+              </h2>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-50 ">
                 <GraficoTemperatura1 />
                 <GraficoTemperatura2 />

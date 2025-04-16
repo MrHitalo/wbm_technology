@@ -16,6 +16,9 @@ import PosicaoAr from "./GraficoPosicaoAr";
 import GraficoErrosAr from "./GraficoErrosAr";
 import ControlAr from "../../assets/CONTROL_AR_BRANCO.png";
 import IotControl from "../../assets/IOT_CONTROL_BRANCA.png";
+import GraficoEstatico from "./GraficoTempEstatico";
+import GraficoTemperaturaAr from "./GraficoTemperaturaAr";
+
 
 const campos: CampoConfiguracao[] = [
   {
@@ -26,29 +29,14 @@ const campos: CampoConfiguracao[] = [
   },
 ];
 
+interface ArData {
+  ciclos: number;
+}
+
 export default function Ar() {
   const [modalAberto, setModalAberto] = useState(false);
   const [mostrarTabelaErros, setMostrarTabelaErros] = useState(false);
   const [quantidadeCiclos, setQuantidadeCiclos] = useState<number>(0);
-
-  const [dataBar, setDataBar] = useState<{
-    labels: string[];
-    datasets: {
-      label: string;
-      data: number[];
-      backgroundColor: string;
-      borderColor: string;
-      borderWidth: number;
-    }[];
-  } | null>(null);
-  const [dataDoughnut, setDataDoughnut] = useState<{
-    labels: string[];
-    datasets: {
-      data: number[];
-      backgroundColor: string[];
-    }[];
-  } | null>(null);
-
   const [loading, setLoading] = useState(true);
 
   const [erros, setErros] = useState([
@@ -82,73 +70,8 @@ export default function Ar() {
     },
   ]);
 
-  useEffect(() => {
-    setLoading(true);
 
-    const webSocketManager = WebSocketManager.getInstance();
-    webSocketManager.connect("ws://localhost:3000/ws/ar");
 
-    const handleData = (data: any) => {
-      console.log("Dados processados no handleData:", data); // Log para depuração
-
-      if (data.ar && typeof data.ar.Ciclos !== "undefined") {
-        setQuantidadeCiclos(data.ar.Ciclos); // Atualiza a quantidade de ciclos
-      } else {
-        console.warn("Propriedade 'Ciclos' não encontrada nos dados:", data);
-      }
-
-      if (data.ar) {
-        const barData = {
-          labels: ["Temperatura"],
-          datasets: [
-            {
-              label: "Temperatura (°C)",
-              data: [data.ar.Temperatura],
-              backgroundColor: "rgba(75, 192, 192, 0.6)",
-              borderColor: "rgba(75, 192, 192, 1)",
-              borderWidth: 1,
-            },
-          ],
-        };
-        setDataBar(barData);
-
-        const doughnutData = {
-          labels: ["Posição Atual"],
-          datasets: [
-            {
-              data: [data.ar.Posicao, 100 - data.ar.Posicao],
-              backgroundColor: ["#00C49F", "#EAEAEA"],
-            },
-          ],
-        };
-        setDataDoughnut(doughnutData);
-      }
-
-      setLoading(false); // Atualiza o estado para parar o carregamento
-    };
-
-    webSocketManager.subscribe(handleData);
-
-    return () => {
-      webSocketManager.unsubscribe(handleData);
-    };
-  }, []);
-
-  if (loading) {
-    return (
-      <div
-        className="loading-container"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <ClipLoader color="#36a2eb" size={100} />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -183,7 +106,7 @@ export default function Ar() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-1">
-        <div className="flex justify-center mt-10 ">
+        <div className="flex justify-center mt-10 space-x-10 ">
           <img src={ControlAr} alt="Control Ar" className="h-20 w-auto mr-15" />
           <img
             src={IotControl}
@@ -198,30 +121,15 @@ export default function Ar() {
             {/* Gráfico de Temperatura */}
             <Card className="flex-1">
               <CardContent className="pb-0 pt-2 pl-20 pr-15 flex flex-col items-center">
-                <h2 className="font-bold text-lg mb-2 text-center">
-                  Temperatura
-                </h2>
-                <div className="flex items-center justify-center w-full mb-15 mr-1.5">
-                  <div className="w-full h-60">
-                    {dataBar ? (
-                      <Bar data={dataBar} />
-                    ) : (
-                      <p>Erro ao trazer Dados...</p>
-                    )}
-                  </div>
-                </div>
+                <GraficoTemperaturaAr />
               </CardContent>
             </Card>
-
             {/* Gráfico de Posição */}
             <Card className="flex-1">
-              <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
-                <h2 className="font-bold text-lg mb-2 text-center">Posição</h2>
-                {dataDoughnut ? (
-                  <PosicaoAr data={dataDoughnut} />
-                ) : (
-                  <p>Erro ao trazer Dados...</p>
-                )}
+              <CardContent className="pb-0 pt-2 pl-20 pr-15 flex flex-col items-center">
+                <PosicaoAr setQuantidadeCiclos={function (value: number): void {
+                  throw new Error("Function not implemented.");
+                } } />
               </CardContent>
             </Card>
           </div>
@@ -241,17 +149,17 @@ export default function Ar() {
           {/* Nova Tabela de Erros*/}
           {mostrarTabelaErros && (
             <div className="mb-20 text-center">
-              <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
+              <TabelaDeErros tituloTabela="TABELA DE ERROS" erros={erros} />
             </div>
           )}
 
           {/* Gráfico de Temperatura por Tempo */}
-          <Card>
+          <Card className="mt-10 mb-10">
             <CardContent className="p-4 flex flex-col items-center">
               <h2 className="font-bold text-xl mb-4 text-center">
-                Temperatura por Tempo (24h)
+                REGISTRO DE TEMPERATURA POR HORA
               </h2>
-              <GraficoLinhaTemperatura />
+              <GraficoEstatico />
             </CardContent>
           </Card>
 

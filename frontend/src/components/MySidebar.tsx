@@ -65,7 +65,7 @@ export default function AppSidebar() {
                 {isOpen && <span>Control Ar</span>}
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 to="/alimentador"
                 className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-50"
@@ -73,7 +73,7 @@ export default function AppSidebar() {
                 <Wrench className="w-5 h-5" />
                 {isOpen && <span>Control Feed</span>}
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 to="/monitorTemperatura"

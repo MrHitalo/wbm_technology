@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <div className="w-full mt-auto bg-primary">
-      <footer className="text-center text-white py-3">
+    <div className="w-full mt-auto bg-primary ">
+      <footer className="text-center text-white py-3 ">
           <Link to="/" className="text-white no-underline hover:underline">
             Home
           </Link>

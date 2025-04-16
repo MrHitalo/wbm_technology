@@ -24,8 +24,6 @@ const dataGauge = {
         if (ctx.dataIndex === 1) return "rgb(234, 234, 234)";
         return COLORS[index(ctx.raw as number)];
       },
-      borderWidth: 0,
-      cutout: "70%",
     },
   ],
 };
@@ -47,8 +45,7 @@ const optionsGauge = {
 export default function GraficoTemperatura2() {
     return(
                               <div className="GraficoTemperatura2">
-                                <h2 className="font-bold text-lg mb-2 text-center">Temperatura Atual</h2>
-                                <h1 className="font-normal text-lg  text-center text-black ">Temperatura 2</h1>
+                                <h1 className="font-bold text-lg text-center">Temperatura 2</h1>
                                   <div className="w-80 h-52 flex flex-col items-center justify-center">
                                     <Doughnut className="mt-1" data={dataGauge} options={optionsGauge} />
                                       <span className="font-bold text-4xl -mt-10">{value + "°"}</span>

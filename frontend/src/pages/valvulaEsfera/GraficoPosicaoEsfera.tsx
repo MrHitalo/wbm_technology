@@ -17,8 +17,6 @@ const dataGauge = {
     {
       data: [value, 100-value],
       backgroundColor: ["#00C49F", "#EAEAEA"],
-      borderWidth: 1,
-      cutout: "70%",
     },
   ],
 };
@@ -40,7 +38,7 @@ const optionsGauge = {
 export default function GraficoPosicaoEsfera() {
     return(
                               <div className="GraficoPosicao">
-                                <h2 className="font-bold text-lg mb-2 text-center">Posição Da Válvula</h2>
+                                <h2 className="font-bold text-lg mb-2 text-center">POSIÇÃO DA VÁLVULA</h2>
                                 {/* <h1 className="font-normal text-lg  text-center text-black ">Temperatura 4</h1> */}
                                   <div className="w-80 h-52 flex flex-col items-center justify-center">
                                     <Doughnut className="mt-18" data={dataGauge} options={optionsGauge} />

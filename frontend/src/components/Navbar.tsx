@@ -1,14 +1,16 @@
 import React from "react";
-import logoOfc from "../assets/LOGO-OFC-WBM.png"; // Caminho relativo correto
+import logoWBM from "../assets/LOGO-OFC-WBM.png"; // Caminho relativo correto
 import logo from "../assets/logo.png";
+import IotControl from "../assets/Iot_Control.png"; // Caminho relativo correto
 
 export default function Navbar() {
   return (
-    <header className="bg-white shadow-md py-4 px-6 flex justify-between items-center w-full ">
+    <header className="bg-white shadow-md flex items-center w-full justify-center">
       {/* Logo + título */}
-      <div className="flex items-center gap-3">
-        <img src={logo} alt="Logo WBM" className="h-15 w-auto" />
-      </div>
+      <div className="flex justify-center -mt-5 -mb-10 ">
+          <img src={logoWBM} alt="Logo WBM" className="h-60 w-auto mr-15" />
+          <img src={IotControl} alt="Iot Control" className="h-32 w-auto ml-15 mt-10" />
+        </div>
 
     </header>
   );

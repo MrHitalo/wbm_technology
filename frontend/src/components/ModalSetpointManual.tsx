@@ -25,7 +25,7 @@ const ModalSetpointManual: React.FC<ModalSetpointManualProps> = ({ closeModal })
                         <input
                             id="setpoint-manual"
                             type="number"
-                            placeholder="Ex: 8"
+                            placeholder="8"
                             className="border text-black border-gray-300 rounded px-3 py-2"
                         />
                     </div>
