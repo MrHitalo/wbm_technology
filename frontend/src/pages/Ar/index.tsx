@@ -88,52 +88,46 @@ export default function Ar() {
     const webSocketManager = WebSocketManager.getInstance();
     webSocketManager.connect("ws://localhost:3000/ws/ar");
 
-    interface ArData {
-      ar: {
-        Temperatura: number;
-        Posicao: number;
-      };
-      ciclos: number;
-    }
+    const handleData = (data: any) => {
+      console.log("Dados processados no handleData:", data); // Log para depuração
 
-    const handleData = (data: ArData) => {
-      const barData = {
-        labels: ["Temperatura"],
-        datasets: [
-          {
-            label: "Temperatura (°C)",
-            data: [data.ar.Temperatura],
-            backgroundColor: "rgba(75, 192, 192, 0.6)",
-            borderColor: "rgba(75, 192, 192, 1)",
-            borderWidth: 1,
-          },
-        ],
-      };
-      setDataBar(barData);
-      const doughnutData = {
-        labels: ["Posição Atual"],
-        datasets: [
-          {
-            data: [data.ar.Posicao, 100 - data.ar.Posicao],
-            backgroundColor: ["#00C49F", "#EAEAEA"],
-          },
-        ],
-      };
-      setDataDoughnut(doughnutData);
-
-      if (data.ciclos !== undefined) {
-        setQuantidadeCiclos(data.ciclos);
+      if (data.ar && typeof data.ar.Ciclos !== "undefined") {
+        setQuantidadeCiclos(data.ar.Ciclos); // Atualiza a quantidade de ciclos
+      } else {
+        console.warn("Propriedade 'Ciclos' não encontrada nos dados:", data);
       }
 
-      setLoading(false);
+      if (data.ar) {
+        const barData = {
+          labels: ["Temperatura"],
+          datasets: [
+            {
+              label: "Temperatura (°C)",
+              data: [data.ar.Temperatura],
+              backgroundColor: "rgba(75, 192, 192, 0.6)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+            },
+          ],
+        };
+        setDataBar(barData);
+
+        const doughnutData = {
+          labels: ["Posição Atual"],
+          datasets: [
+            {
+              data: [data.ar.Posicao, 100 - data.ar.Posicao],
+              backgroundColor: ["#00C49F", "#EAEAEA"],
+            },
+          ],
+        };
+        setDataDoughnut(doughnutData);
+      }
+
+      setLoading(false); // Atualiza o estado para parar o carregamento
     };
 
     webSocketManager.subscribe(handleData);
-
-    const latestData = webSocketManager.getLatestData();
-    if (){
-
-    }
 
     return () => {
       webSocketManager.unsubscribe(handleData);

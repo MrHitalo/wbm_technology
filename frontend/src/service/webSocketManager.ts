@@ -25,11 +25,13 @@ class WebSocketManager {
     };
 
     this.ws.onmessage = (event) => {
+      console.log("Dados recebidos do WebSocket (raw):", event.data); // Log dos dados brutos
       try {
         const data = JSON.parse(event.data);
+        console.log("Dados processados do WebSocket (JSON):", data); // Log dos dados processados
 
-        // Verifique se a propriedade "ciclos" existe nos dados recebidos
-        if (data && typeof data.ciclos !== "undefined") {
+        // Verifica se a propriedade "ciclos" existe dentro de "ar"
+        if (data.ar && typeof data.ar.Ciclos !== "undefined") {
           this.latestData = data; // Armazena os dados mais recentes
           this.callbacks.forEach((callback) => callback(data));
         } else {
