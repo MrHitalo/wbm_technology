@@ -56,10 +56,10 @@ export default function PosicaoAr({
       }
     };
 
-    webSocketManager.subscribe(handleData);
+    webSocketManager.subscribe("posicao",handleData);
 
     return () => {
-      webSocketManager.unsubscribe(handleData);
+      webSocketManager.unsubscribe("posicao",handleData);
     };
   }, [setQuantidadeCiclos]);
 

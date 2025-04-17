@@ -41,10 +41,10 @@ export default function ConfiguracoesValvulaEsfera() {
       }
     };
 
-    ws.subscribe(handleData);
+    ws.subscribe("config",handleData);
 
     return () => {
-      ws.unsubscribe(handleData);
+      ws.unsubscribe("config",handleData);
     };
   }, []);
 

@@ -69,10 +69,10 @@ export default function GraficoTemperaturaAr() {
       setDataDoughnut(chartData);
     };
 
-    webSocketManager.subscribe(handleData);
+    webSocketManager.subscribe("Temperatura", handleData);
 
     return () => {
-      webSocketManager.unsubscribe(handleData);
+      webSocketManager.unsubscribe("Temperatura",handleData);
     };
   }, []);
 
