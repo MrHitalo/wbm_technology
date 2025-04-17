@@ -15,57 +15,40 @@ const optionsGauge = {
   },
 };
 
-export default function GraficoPosicaoEsfera() {
+export default function GraficoPosicaoGaveta() {
   const [posicao, setPosicao] = useState<{
     labels: string[];
     datasets: { data: number[]; backgroundColor: string[] }[];
   } | null>(null);
 
-  const [isLoading, setIsLoading] = useState(true); // Estado para controlar o carregamento
-
   useEffect(() => {
-    const ws = WebSocketManager.getInstance();
-    ws.connect("ws://localhost:3000/ws/esfera");
+    const wsManager = WebSocketManager.getInstance();
 
-    const handleData = (data: { esfera?: { Posicao?: number } }) => {
-      if (data.esfera && typeof data.esfera.Posicao !== "undefined") {
+    const handleData = (data: { gaveta?: { Posicao?: number } }) => {
+      if (data.gaveta && typeof data.gaveta.Posicao !== "undefined") {
         const posicao = {
           labels: ["Posição Atual"],
           datasets: [
             {
-              data: [data.esfera.Posicao, 100 - data.esfera.Posicao],
+              data: [data.gaveta.Posicao, 100 - data.gaveta.Posicao],
               backgroundColor: ["#00C49F", "#EAEAEA"],
             },
           ],
         };
         setPosicao(posicao);
-        setIsLoading(false); // Dados carregados
-      } else {
-        console.warn("Dados inválidos ou incompletos recebidos:", data);
       }
     };
 
-    ws.subscribe("ws://localhost:3000/ws/esfera", handleData);
+    wsManager.subscribe("gaveta", handleData);
 
     return () => {
-      ws.unsubscribe("ws://localhost:3000/ws/esfera", handleData);
-      setPosicao(null); // Limpa o estado ao desmontar o componente
+      wsManager.unsubscribe("gaveta", handleData);
     };
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <span className="text-gray-500">Carregando dados...</span>
-      </div>
-    );
-  }
-
   return (
     <div className="GraficoPosicao">
-      <h2 className="font-bold text-lg mb-2 text-center">
-        POSIÇÃO DA VÁLVULA ESFERA
-      </h2>
+      <h2 className="font-bold text-lg mb-2 text-center">POSIÇÃO DA GAVETA</h2>
       <div className="w-80 h-52 flex flex-col items-center justify-center">
         {posicao ? (
           <>

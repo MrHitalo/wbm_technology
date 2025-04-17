@@ -1,42 +1,34 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { SidebarProvider } from "./components/ui/sidebar"; // ajuste o caminho se precisar
+import { Suspense, lazy } from "react";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { DataProvider } from "./Context/DataContext";
 
-import Painel from "./pages/painelPage";
-import Alimentador from "./pages/alimentadorPage";
-import Ar from "./pages/Ar";
-import ValvulaGaveta from "./pages/valvulaGavetaPage";
-import ValvulaEsfera from "./pages/valvulaEsfera";
-import MonitorDeTemperatura from "./pages/monitorDeTemperatura";
+const Painel = lazy(() => import("./pages/painelPage"));
+const Alimentador = lazy(() => import("./pages/alimentadorPage"));
+const Ar = lazy(() => import("./pages/Ar"));
+const ValvulaGaveta = lazy(() => import("./pages/valvulaGavetaPage"));
+const ValvulaEsfera = lazy(() => import("./pages/valvulaEsfera"));
+const MonitorDeTemperatura = lazy(() => import("./pages/monitorDeTemperatura"));
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Painel />,
-  },
-  {
-    path: "/alimentador",
-    element: <Alimentador />,
-  },
-  {
-    path: "/ar",
-    element: <Ar />,
-  },
-  {
-    path: "/Gaveta",
-    element: <ValvulaGaveta />,
-  },
-  {
-    path: "/Esfera",
-    element: <ValvulaEsfera />,
-  },
-  {
-    path: "/monitorTemperatura",
-    element: <MonitorDeTemperatura />,
-  },
+  { path: "/", element: <Painel /> },
+  { path: "/alimentador", element: <Alimentador /> },
+  { path: "/ar", element: <Ar /> },
+  { path: "/Gaveta", element: <ValvulaGaveta /> },
+  { path: "/Esfera", element: <ValvulaEsfera /> },
+  { path: "/monitorTemperatura", element: <MonitorDeTemperatura /> },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ErrorBoundary>
+      <DataProvider>
+        <Suspense fallback={<div>Carregando...</div>}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </DataProvider>
+    </ErrorBoundary>
+  );
 }
 
 export default App;

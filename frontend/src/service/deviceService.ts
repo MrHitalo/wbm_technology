@@ -55,7 +55,6 @@ export const connectWebSocket = (onMessage: (data: any) => void) => {
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log("Mensagem recebida do WebSocket:", data);
       onMessage(data);
     };
 

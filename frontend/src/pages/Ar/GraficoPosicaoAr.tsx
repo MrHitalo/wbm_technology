@@ -2,14 +2,6 @@ import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import WebSocketManager from "../../service/webSocketManager";
 
-
-interface ArData {
-  ar: {
-      Posicao: number;
-  }
-}
-
-
 const optionsGauge = {
   aspectRatio: 2,
   circumference: 180,

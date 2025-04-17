@@ -163,14 +163,13 @@ async function lerTodosDispositivos() {
 
 async function lerEsfera() {
   try {
-    const response = await client.readHoldingRegisters(0, 8);
+    const response = await client.readHoldingRegisters(0, 9);
 
     const dadosEsfera = {};
 
     mapa_leitura.esfera.fields.forEach((campo, index) => {
       dadosEsfera[campo.trim()] = response.data[index];
     });
-
     return dadosEsfera;
   } catch (err) {
     console.error("Erro ao ler esfera:", err.message);
@@ -180,7 +179,7 @@ async function lerEsfera() {
 
 async function lerGaveta() {
   try {
-    const response = await client.readHoldingRegisters(9, 17);
+    const response = await client.readHoldingRegisters(10, 18);
 
     const dadosGaveta = {};
 
@@ -197,7 +196,7 @@ async function lerGaveta() {
 
 async function lerAr() {
   try {
-    const response = await client.readHoldingRegisters(18, 21);
+    const response = await client.readHoldingRegisters(19, 22);
     const dadosAr = {};
 
     mapa_leitura.ar.fields.forEach((campo, index) => {
@@ -213,7 +212,7 @@ async function lerAr() {
 
 async function lerTemperatura() {
   try {
-    const response = await client.readHoldingRegisters(22, 26);
+    const response = await client.readHoldingRegisters(23, 27);
     const dadosTemperatura = {};
 
     mapa_leitura.temperatura.fields.forEach((campo, index) => {
@@ -229,7 +228,7 @@ async function lerTemperatura() {
 
 async function lerUmidade() {
   try {
-    const response = await client.readHoldingRegisters(27, 29);
+    const response = await client.readHoldingRegisters(28, 30);
     const dadosUmidade = {};
 
     mapa_leitura.umidade.fields.forEach((campo, index) => {

@@ -19,7 +19,6 @@ import IotControl from "../../assets/IOT_CONTROL_BRANCA.png";
 import GraficoEstatico from "./GraficoTempEstatico";
 import GraficoTemperaturaAr from "./GraficoTemperaturaAr";
 
-
 const campos: CampoConfiguracao[] = [
   {
     id: "Setpoint",
@@ -69,9 +68,6 @@ export default function Ar() {
       detalhe: "Erro detectado",
     },
   ]);
-
-
-
 
   return (
     <>
@@ -127,9 +123,11 @@ export default function Ar() {
             {/* Gráfico de Posição */}
             <Card className="flex-1">
               <CardContent className="pb-0 pt-2 pl-20 pr-15 flex flex-col items-center">
-                <PosicaoAr setQuantidadeCiclos={function (value: number): void {
-                  throw new Error("Function not implemented.");
-                } } />
+                <PosicaoAr
+                  setQuantidadeCiclos={function (value: number): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                />
               </CardContent>
             </Card>
           </div>
