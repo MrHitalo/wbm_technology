@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // pequenos componentes
 import { Card, CardContent } from "../../components/ui/card";
@@ -19,6 +19,11 @@ import MySidebar from "../../components/MySidebar";
 import GraficoErrosGaveta from "./GraficoErrosGaveta";
 import GateValve from "../../assets/LOGO CONTROLFLOW_GATE_VALVE (1).png";
 import IotControl from "../../assets/IOT_CONTROL_BRANCA.png";
+import WebSocketManager from "../../service/webSocketManager";
+
+interface GavetaData {
+  Ciclos: number;
+}
 
 const erros = [
   { titulo: "ERRO 1: MOTOR NÃO FUNCIONOU", detalhe: "Sem erro aparente" },
@@ -70,6 +75,28 @@ export default function ValvulaGaveta() {
     useState(false);
   const [setpointManualAtivo, setSetpointManualAtivo] = useState(false);
   const [mostrarTabelaErros, setMostrarTabelaErros] = useState(false);
+  const [ciclos, setCiclos] = useState<number | null>(null); // Estado para quantidade de ciclos
+  const [isLoading, setIsLoading] = useState(true); // Estado de carregamento
+
+  useEffect(() => {
+    const wsManager = WebSocketManager.getInstance();
+
+    const handleData = (data: { gaveta?: GavetaData }) => {
+      if (data.gaveta) {
+        console.log("Dados recebidos da gaveta:", data.gaveta);
+        setCiclos(data.gaveta.Ciclos);
+        setIsLoading(false); // Dados carregados
+      } else {
+        console.warn("Dados inválidos recebidos:", data);
+      }
+    };
+
+    wsManager.subscribe("gaveta", handleData);
+
+    return () => {
+      wsManager.unsubscribe("gaveta", handleData);
+    };
+  }, []);
 
   return (
     <>
@@ -108,7 +135,7 @@ export default function ValvulaGaveta() {
             <div className="space-y-1 text-center col-span-2 mx-auto mt-5">
               <label className="block font-medium">Quantidade de ciclos</label>
               <div className="inline-block border-b border-gray-200 px-15 pb-0.5 space-y-1 text-center">
-                2
+                {isLoading ? "Carregando..." : ciclos ?? "Sem dados"}
               </div>
             </div>
           </CardContent>
