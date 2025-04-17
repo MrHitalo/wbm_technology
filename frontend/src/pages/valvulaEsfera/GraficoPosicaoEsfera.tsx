@@ -21,11 +21,8 @@ export default function GraficoPosicaoEsfera() {
     datasets: { data: number[]; backgroundColor: string[] }[];
   } | null>(null);
 
-  const [isLoading, setIsLoading] = useState(true); // Estado para controlar o carregamento
-
   useEffect(() => {
-    const ws = WebSocketManager.getInstance();
-    ws.connect("ws://localhost:3000/ws/esfera");
+    const wsManager = WebSocketManager.getInstance();
 
     const handleData = (data: { esfera?: { Posicao?: number } }) => {
       if (data.esfera && typeof data.esfera.Posicao !== "undefined") {
@@ -39,33 +36,19 @@ export default function GraficoPosicaoEsfera() {
           ],
         };
         setPosicao(posicao);
-        setIsLoading(false); // Dados carregados
-      } else {
-        console.warn("Dados inválidos ou incompletos recebidos:", data);
       }
     };
 
-    ws.subscribe("ws://localhost:3000/ws/esfera", handleData);
+    wsManager.subscribe("esfera", handleData);
 
     return () => {
-      ws.unsubscribe("ws://localhost:3000/ws/esfera", handleData);
-      setPosicao(null); // Limpa o estado ao desmontar o componente
+      wsManager.unsubscribe("esfera", handleData);
     };
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <span className="text-gray-500">Carregando dados...</span>
-      </div>
-    );
-  }
-
   return (
     <div className="GraficoPosicao">
-      <h2 className="font-bold text-lg mb-2 text-center">
-        POSIÇÃO DA VÁLVULA ESFERA
-      </h2>
+      <h2 className="font-bold text-lg mb-2 text-center">POSIÇÃO DA ESFERA</h2>
       <div className="w-80 h-52 flex flex-col items-center justify-center">
         {posicao ? (
           <>

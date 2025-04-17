@@ -17,7 +17,10 @@ class WebSocketManager {
       return; // Já conectado
     }
 
-    const ws = new WebSocket(`ws://localhost:3000/ws/${endpoint}`);
+    // Certifique-se de que o endpoint não contém caracteres inválidos
+    const sanitizedEndpoint = encodeURIComponent(endpoint).replace(/%23/g, ""); // Remove fragment identifiers (#)
+
+    const ws = new WebSocket(`ws://localhost:3000/ws/${sanitizedEndpoint}`);
     this.connections[endpoint] = ws;
     this.callbacks[endpoint] = [];
 
