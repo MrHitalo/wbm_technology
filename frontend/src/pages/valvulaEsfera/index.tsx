@@ -89,9 +89,21 @@ export default function ValvulaEsfera() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-4">
-      <div className="flex justify-center mt-12 space-x-10">
-          <img src={BallValve} alt="Control Ar" className="h-27 w-auto mr-15" />
-          <img src={IotControl} alt="Iot Control" className="h-24 w-auto ml-15" />
+      <div className="flex justify-center items-center  mt-5 gap-10 w-full">
+          <div className="h-33 flex items-center">
+            <img
+              src={BallValve}
+              alt="Control Ar"
+              className="max-h-full w-auto object-contain mt-11"
+            />
+          </div>
+          <div className="h-24 flex items-center">
+            <img
+              src={IotControl}
+              alt="Iot Control"
+              className="max-h-full w-auto object-contain"
+            />
+          </div>
         </div>
         <div className="max-w-5xl mx-auto space-y-4">
           {/* Gauge Chart de temperatura */}

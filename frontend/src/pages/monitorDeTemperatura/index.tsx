@@ -28,8 +28,8 @@ const erros = [
 ];
 
 export default function MonitorDeTemperatura() {
-    const [mostrarTabelaErros, setMostrarTabelaErros] = useState(false);
-  
+  const [mostrarTabelaErros, setMostrarTabelaErros] = useState(false);
+
   return (
     <>
       <MySidebar />
@@ -50,27 +50,39 @@ export default function MonitorDeTemperatura() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-4">
-      <div className="flex justify-center mt-12 space-x-10 ">
-        <img src={TempMonitor} alt="Control Ar" className="h-20 w-auto mr-15" />
-        <img src={IotControl} alt="Iot Control" className="h-24 w-auto ml-15 " />
+        <div className="flex justify-center items-center mt-13 gap-10 w-full">
+          <div className="h-24 flex items-center">
+            <img
+              src={TempMonitor}
+              alt="TempMonitor"
+              className="max-h-full w-auto object-contain"
+            />
+          </div>
+          <div className="h-24 flex items-center">
+            <img
+              src={IotControl}
+              alt="Iot Control"
+              className="max-h-full w-auto object-contain mb-9"
+            />
+          </div>
         </div>
-        <div className="max-w-5xl mx-auto space-y-4">
+        <div className="max-w-5xl mx-auto space-y-4 mt-11">
           {/* Graficos de Temperatura */}
           <Card className="mt-10">
             <CardContent className="p-4 flex flex-col items-center">
-            <h2 className="font-bold text-xl mb-8 text-center">
+              <h2 className="font-bold text-xl mb-8 text-center">
                 GRÁFICOS DA TEMPERATURA ATUAL
               </h2>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-50 ">
                 <GraficoTemperatura1 />
                 <GraficoTemperatura2 />
-                </div>  
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-50 mt-10">
+              </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-50 mt-10">
 
                 <GraficoTemperatura3 />
                 <GraficoTemperatura4 />
               </div>
-                
+
             </CardContent>
           </Card>
 
@@ -79,20 +91,20 @@ export default function MonitorDeTemperatura() {
             <Card>
               <CardContent className="pb-4 pt-2 px-10 flex flex-col items-center">
                 <GraficoErrosTemp
-                                  mostrarTabelaErros={mostrarTabelaErros}
-                                  setMostrarTabelaErros={setMostrarTabelaErros}
-                                />
+                  mostrarTabelaErros={mostrarTabelaErros}
+                  setMostrarTabelaErros={setMostrarTabelaErros}
+                />
               </CardContent>
             </Card>
           </div>
 
 
           {/* Nova Tabela de Erros*/}
-                    {mostrarTabelaErros && (
-                      <div className="mb-20">
-                        <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
-                      </div>
-                    )}
+          {mostrarTabelaErros && (
+            <div className="mb-20">
+              <TabelaDeErros tituloTabela="Erros da Válvula" erros={erros} />
+            </div>
+          )}
 
         </div>
       </div>

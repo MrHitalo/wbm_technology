@@ -102,16 +102,24 @@ export default function Ar() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-1">
-        <div className="flex justify-center mt-10 space-x-10 ">
-          <img src={ControlAr} alt="Control Ar" className="h-20 w-auto mr-15" />
-          <img
-            src={IotControl}
-            alt="Iot Control"
-            className="h-24 w-auto ml-15"
-          />
+      <div className="flex justify-center items-center mt-14 gap-10 w-full">
+          <div className="h-24 flex items-center">
+            <img
+              src={ControlAr}
+              alt="Control Ar"
+              className="max-h-full w-auto object-contain"
+            />
+          </div>
+          <div className="h-24 flex items-center">
+            <img
+              src={IotControl}
+              alt="Iot Control"
+              className="max-h-full w-auto object-contain"
+            />
+          </div>
         </div>
 
-        <div className="max-w-5xl mx-auto space-y-4">
+        <div className="max-w-5xl mx-auto space-y-4 mt-13">
           {/* Gráficos de Temperatura e Posição */}
           <div className="flex justify-center mt-10 space-x-4">
             {/* Gráfico de Temperatura */}

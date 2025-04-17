@@ -143,16 +143,24 @@ export default function ValvulaGaveta() {
       </div>
 
       <div className="min-h-screen bg-primary text-white p-4">
-        <div className="flex justify-center mt-12 space-x-10">
-          <img src={GateValve} alt="Control Ar" className="h-27 w-auto mr-15" />
-          <img
-            src={IotControl}
-            alt="Iot Control"
-            className="h-24 w-auto ml-15"
-          />
+      <div className="flex justify-center items-center mt-5 gap-10 w-full">
+          <div className="h-33 flex items-center">
+            <img
+              src={GateValve}
+              alt="Control Ar"
+              className="max-h-full w-auto object-contain mt-11"
+            />
+          </div>
+          <div className="h-24 flex items-center">
+            <img
+              src={IotControl}
+              alt="Iot Control"
+              className="max-h-full w-auto object-contain"
+            />
+          </div>
         </div>
         <div className="max-w-5xl mx-auto space-y-4">
-          {/* grafico de posição */}
+          {/* Gauge Chart de temperatura */}
           <div className="flex justify-center mt-10 space-x-4">
             <Card className="flex-1">
               <CardContent className="pb-4 pt-2 pl-25 pr-25 flex flex-col items-center">
