@@ -14,12 +14,10 @@ class WebSocketManager {
 
   connect(endpoint: string) {
     if (this.connections[endpoint]) {
-      return; // Já conectado
+      return;
     }
 
-    // Certifique-se de que o endpoint não contém caracteres inválidos
-    const sanitizedEndpoint = encodeURIComponent(endpoint).replace(/%23/g, ""); // Remove fragment identifiers (#)
-
+    const sanitizedEndpoint = encodeURIComponent(endpoint).replace(/%23/g, "");
     const ws = new WebSocket(`ws://localhost:3000/ws/${sanitizedEndpoint}`);
     this.connections[endpoint] = ws;
     this.callbacks[endpoint] = [];
@@ -31,6 +29,10 @@ class WebSocketManager {
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       this.callbacks[endpoint].forEach((callback) => callback(data));
+    };
+
+    ws.onerror = (error) => {
+      console.error(`Erro no WebSocket (${endpoint}):`, error);
     };
 
     ws.onclose = () => {

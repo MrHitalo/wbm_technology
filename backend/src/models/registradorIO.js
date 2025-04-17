@@ -218,8 +218,7 @@ async function lerTemperatura() {
     mapa_leitura.temperatura.fields.forEach((campo, index) => {
       dadosTemperatura[campo.trim()] = response.data[index];
     });
-
-    return dadosTemperatura; // Retorna corretamente
+    return dadosTemperatura;
   } catch (err) {
     console.error("Erro ao ler temperatura:", err.message);
     throw err;

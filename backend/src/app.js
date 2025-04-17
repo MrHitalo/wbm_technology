@@ -19,6 +19,7 @@ const server = app.listen(PORT, () => {
 const wssAr = new WebSocketServer({ noServer: true });
 const wssEsfera = new WebSocketServer({ noServer: true });
 const wssGaveta = new WebSocketServer({ noServer: true });
+const wsstemperature = new WebSocketServer({ noServer: true });
 
 // WebSocket para "ar"
 wssAr.on("connection", (ws) => {
@@ -92,6 +93,33 @@ wssGaveta.on("connection", (ws) => {
   });
 });
 
+// WebSocket para "temperatura"
+wsstemperature.on("connection", (ws) => {
+  console.log("Cliente conectado ao WebSocket de 'temperatura'");
+
+  const interval = setInterval(async () => {
+    try {
+      const dadosTemperatura = await registradorIO.lerTemperatura();
+      ws.send(
+        JSON.stringify({
+          time: new Date().toLocaleTimeString(),
+          temperatura: dadosTemperatura,
+        })
+      );
+    } catch (err) {
+      console.error("Erro ao ler dados de 'temperatura':", err.message);
+      ws.send(
+        JSON.stringify({ error: "Erro ao obter dados de 'temperatura'" })
+      );
+    }
+  }, 1000);
+
+  ws.on("close", () => {
+    console.log("Cliente desconectado do WebSocket de 'temperatura'");
+    clearInterval(interval);
+  });
+});
+
 // Gerencia conexões para múltiplos WebSockets
 server.on("upgrade", (request, socket, head) => {
   const pathname = new URL(request.url, `http://${request.headers.host}`)
@@ -108,6 +136,10 @@ server.on("upgrade", (request, socket, head) => {
   } else if (pathname === "/ws/gaveta") {
     wssGaveta.handleUpgrade(request, socket, head, (ws) => {
       wssGaveta.emit("connection", ws, request);
+    });
+  } else if (pathname === "/ws/temperatura") {
+    wsstemperature.handleUpgrade(request, socket, head, (ws) => {
+      wsstemperature.emit("connection", ws, request);
     });
   } else {
     socket.destroy();
